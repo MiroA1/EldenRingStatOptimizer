@@ -1,0 +1,133 @@
+Searchbox_weapon = {weapon_name}
+
+Extra_Data.csv
+Max_Upgrade = Find where name = {weapon_name} and Max Upgrade
+
+searchbox_upgradelevel = {upgrade_level}
+
+searchbox_affinity = {affinity}
+if affinity = none
+{weapon} = {weapon_name}
+else
+{weapon} = {affinity} + {weapon_name}
+
+checkbox_2h = is_2handing (TRUE or FALSE)
+
+Extra_Data.csv
+Required_str = Find where name = {weapon} and Required (Str)
+Required_Dex = Find where name = {weapon} and Required (Str)
+Required_Int = Find where name = {weapon} and Required (Str)
+Required_Fai = Find where name = {weapon} and Required (Str)
+Required_Arc = Find where name = {weapon} and Required (Str)
+weapon_type = Find where name = {weapon} and Weapon Type
+if current_str >= required_str
+	str_req_met = 1
+else
+	str_req_met = 0
+5kpl
+
+if Find where name = {weapon} and Affinity != ""
+	has_affinity = True
+else
+	has_affinity = False
+if Find where name = {weapon} and Str == "Yes"
+	has_2hbonus = True
+else
+	has_2hbonus = False
+
+Passive.csv
+PassiveType1 = Find where name = {weapon} and Type 1
+PassiveType2 = Find where name = {weapon} and Type 2
+
+if {PassiveType1} = Scarlet Rot:
+Rot/Mad/Sleep1 = Find where name = {weapon} and Scarlet Rot +0
+elif {PassiveType1} = Madness:
+Rot/Mad/Sleep1 = Find where name = {weapon} and Madness +0
+elif {PassiveType1} = Sleep:
+Rot/Mad/Sleep1 = Find where name = {weapon} and Sleep +0
+elif {PassiveType1} = Frost:
+FrostBase1 = Find where name = {weapon} and Frost +{upgrade_level}
+elif {PassiveType1} = Poison:
+PoisonBase1 = Find where name = {weapon} and Poison +{upgrade_level}
+elif {PassiveType1} = Blood:
+BloodBase1 = Find where name = {weapon} and Blood +{upgrade_level}
+
+if {PassiveType2} = Scarlet Rot:
+Rot/Mad/Sleep2 = Find where name = {weapon} and Scarlet Rot +0
+elif {PassiveType2} = Madness:
+Rot/Mad/Sleep2 = Find where name = {weapon} and Madness +0
+elif {PassiveType2} = Sleep:
+Rot/Mad/Sleep2 = Find where name = {weapon} and Sleep +0
+elif {PassiveType2} = Frost:
+FrostBase2 = Find where name = {weapon} and Frost +{upgrade_level}
+elif {PassiveType2} = Poison:
+PoisonBase2 = Find where name = {weapon} and Poison +{upgrade_level}
+elif {PassiveType2} = Blood:
+BloodBase2 = Find where name = {weapon} and Blood +{upgrade_level}
+
+
+(Elements) attack:
+attack.csv
+Phys_attack = Find where name = {weapon} and f"Phys +{upgrade_level}"
+Mag_attack = Find where name = {weapon} and f"Mag +{upgrade_level}"
+Fire_attack = Find where name = {weapon} and f"Fire +{upgrade_level}"
+Ligh_attack = Find where name = {weapon} and f"Ligh +{upgrade_level}"
+Holy_attack = Find where name = {weapon} and f"Holy +{upgrade_level}"
+
+(Attributes) Scaling
+scaling.csv
+Str_scaling = Find where name = {weapon} and f"Str +{upgrade_level}"
+Dex_scaling = Find where name= {weapon} and f"Dex +{upgrade_level}"
+Int_scaling = Find where name = {weapon} and f"Int +{upgrade_level}"
+Fai_scaling = Find where name = {weapon} and f"Fai +{upgrade_level}"
+Arc_scaling = Find where name = {weapon} and f"Arc +{upgrade_level}"
+
+(Element) Calc ID
+CalcCorrectGraph_ID.csv
+PhysCalcID = Find where name = {weapon} and Physical
+MagCalcID = Find where name = {weapon} and Magic
+FireCalcID = Find where name = {weapon} and Fire
+LighCalcID = Find where name = {weapon} and Lightning
+HolyCalcID = Find where name = {weapon} and Holy
+AttackElementCorrectID = Find where name = {weapon} and AttackElementCorrectID?
+
+if AttackElementCorrectID >= 20000
+	isStaffOrSeal = TRUE
+else
+	isStaffOrSeal = FALSE
+
+(Element) Scales on (Attributes?)
+AttackElementCorrectParam.csv
+PhysScalesOnStr = Find where "AttackElementCorrectID" = ID and isStrengthCorrect_byPhysics
+PhysScalesOnStr = Find where "AttackElementCorrectID" = ID and isDexterityCorrect_byPhysics
+PhysScalesOnStr = Find where "AttackElementCorrectID" = ID and isMagicCorrect_byPhysics
+25kpl
+
+(Element) (Attributes) Requirement met?
+kaavoja
+29kpl
+
+
+(Element) (Attributes) CalcCorrect
+Switch functions
+monta
+
+(Element) (Attributes) Damage
+kaavoja
+25kpl
+
+Sorcery(Attributes)
+kaavoja
+5kpl
+
+Sorcery scalings
+kaavoja
+2kpl
+
+(Element) Damage
+kaavoja
+5kpl
+
+(Element) Result Summed
+kaavoja
+5kpl
