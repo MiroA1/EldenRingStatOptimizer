@@ -11,6 +11,7 @@ if affinity = none
 else
 {weapon} = {affinity} + {weapon_name}
 
+TODO:
 checkbox_2h = is_2handing (TRUE or FALSE)
 
 Extra_Data.csv

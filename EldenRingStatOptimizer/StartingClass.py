@@ -1,48 +1,87 @@
 
 class StartingClass:
-    def __init__(self, name, vigor, mind, endurance, strength, dexterity, intelligence, faith, arcane, soul_level):
+    def __init__(self, class_name, min_vigor, min_mind, min_endurance, min_strength, min_dexterity, min_intelligence, min_faith, min_arcane, min_soul_level):
 
-        self.name = name
-        self.Vigor = vigor
-        self.Mind = mind
-        self.endurance = endurance
-        self.strength = strength
-        self.dexterity = dexterity
-        self.intelligence = intelligence
-        self.faith = faith
-        self.arcane = arcane
-        self.Soul_level = soul_level
+        self.class_name = class_name
+        self.vigor = min_vigor
+        self.mind = min_mind
+        self.endurance = min_endurance
+        self.strength = min_strength
+        self.dexterity = min_dexterity
+        self.intelligence = min_intelligence
+        self.faith = min_faith
+        self.arcane = min_arcane
+        self.soul_level = min_soul_level
+
+        #Current Stats
+        self.current_vigor = min_vigor
+        self.current_mind = min_mind
+        self.current_endurance = min_endurance
+        self.current_str = min_strength
+        self.current_dex = min_dexterity
+        self.current_int = min_intelligence
+        self.current_fai = min_faith
+        self.current_arc = min_arcane
+        self.current_soul_level = min_soul_level
 
 
-    def name(self):
-        return self.name
 
-    def vigor(self):
+    def getName(self):
+        return self.class_name
+
+    def getMinVigor(self):
         return self.vigor
 
-    def mind(self):
+    def getMinMind(self):
         return self.mind
 
-    def endurance(self):
+    def getMinEndurance(self):
         return self.endurance
 
-    def strength(self):
+    def getMinStrength(self):
         return self.strength
 
-    def dexterity(self):
+    def getMinDexterity(self):
         return self.dexterity
 
-    def intelligence(self):
+    def getMinIntelligence(self):
         return self.intelligence
 
-    def faith(self):
+    def getMinFaith(self):
         return self.faith
 
-    def arcane(self):
+    def getMinArcane(self):
         return self.arcane
 
-    def soul_level(self):
+    def getMinSoul_level(self):
         return self.soul_level
+
+    def getCurrentVigor(self):
+        return self.current_vigor
+
+    def getCurrentMind(self):
+        return self.current_mind
+
+    def getCurrentEndurance(self):
+        return self.current_endurance
+
+    def getCurrentStrength(self):
+        return self.current_str
+
+    def getCurrentDexterity(self):
+        return self.current_dex
+
+    def getCurrentIntelligence(self):
+        return self.current_int
+
+    def getCurrentFaith(self):
+        return self.current_fai
+
+    def getCurrentArcane(self):
+        return self.current_arc
+
+    def getCurrentSoul_level(self):
+        return self.current_soul_level
 
 
 

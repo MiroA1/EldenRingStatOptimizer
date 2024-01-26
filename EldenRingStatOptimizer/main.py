@@ -1,5 +1,7 @@
 import csv
 from StartingClass import StartingClass
+import Calculator
+import DataReader
 
 TOTAL_SKILL_POINTS = 70
 
@@ -181,164 +183,39 @@ def calculate_dmg(current_str, current_dex, current_arc):
     return total_dmg
 
 
-def main():
+def initData():
 
-
-    starting_class = "Hero"
+    class_name = "Hero"
     weapon_name = "Great Stars"
-    max_upgrade_level = 0
-    upgrade_level = 0
-
-    file_path = "StartingClasses.csv"
-    with open(file_path, 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row["Class"] == starting_class:
-                min_vigor = int(row["Vigor"])
-                min_mind = int(row["Mind"])
-                min_endurance = row["Endurance"]
-                min_strength = row["Strength"]
-                min_dexterity = row["Dexterity"]
-                min_intelligence = row["Intelligence"]
-                min_faith = row["Faith"]
-                min_arcane = row["Arcane"]
-                soul_level = row["Level"]
-                break
-
-    current_vigor = min_vigor
-    current_mind = min_mind
-    current_endurance = min_endurance
-    current_str = min_strength
-    current_dex = min_dexterity
-    current_int = min_intelligence
-    current_fai = min_faith
-    current_arc = min_arcane
-    current_soul_level = soul_level
-
-    starting_class = StartingClass(starting_class, min_vigor, min_mind, min_endurance, min_strength, min_dexterity, min_intelligence, min_faith, min_arcane, soul_level)
-    print(f"object test {starting_class.name}")
-
-    current_str = 60
-    current_dex = 20
-    current_int = 20
-    current_fai = 15
-    current_arc = 30
-
-    #print(f"Starting class: {starting_class}")
-    print(f"Vigor: {min_vigor}")
-    print(f"Mind: {min_mind}")
-    print(f"Endurance: {min_endurance}")
-    print(f"Strength: {min_strength}")
-    print(f"Dexterity: {min_dexterity}")
-    print(f"Intelligence: {min_intelligence}")
-    print(f"Faith: {min_faith}")
-    print(f"Arcane: {min_arcane}")
-    print(f"Soul Level: {soul_level}")
-
-    file_path = "Extra_Data.csv"
-
-    with open(file_path, 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row['Name'] == weapon_name:
-                max_upgrade_level = row["Max Upgrade"]
-                break
-
-    print(f"max_upgrades {max_upgrade_level}")
-    upgrade_level = max_upgrade_level
-
-    # TODO: make affinity list
     affinity = "Blood"
 
+    max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
+    weapon_upgrade_level = 25
 
     weapon = affinity + " " + weapon_name
-    print(weapon)
+    #is_2handing = False
 
-    #TODO: checkbox
-
-    is_2handing = False
-
-    required_str = 0
-    required_dex = 0
-    required_int = 0
-    required_faith = 0
-    required_arc = 0
-    weapon_type = None
-
-    with open(file_path, 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row['Name'] == weapon:
-                required_str = int(row["Required (Str)"])
-                required_dex = int(row.get('Required (Dex)', 0))
-                required_int = int(row.get('Required (Int)', 0))
-                required_fai = int(row["Required (Fai)"])
-                required_arc = int(row.get('Required (Arc)', 0))
-                weapon_type = str(row['Weapon Type'])
-                break
-
-    print(required_str)
-    print(required_dex)
-    print(required_int)
-    print(required_fai)
-    print(required_arc)
-    print(weapon_type)
-
-    str_req_met = 0
-    dex_req_met = 0
-    int_req_met = 0
-    fai_req_met = 0
-    arc_req_met = 0
-
-    if current_str >= required_str:
-        str_req_met = 1
-    if current_dex >= required_dex:
-        dex_req_met = 1
-    if current_int >= required_int:
-        int_req_met = 1
-    if current_fai >= required_fai:
-        faith_req_met = 1
-    if current_arc >= required_arc:
-        arc_req_met = 1
+    starting_class = DataReader.initStartingClass(class_name)
+    weapon_extra_data = DataReader.initWeaponExtraData(weapon, weapon_upgrade_level)
+    weapon_passive = DataReader.initWeaponPassive(weapon, weapon_upgrade_level)
 
 
-    has_affinity = False
-
-    with open("Extra_Data.csv", 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row['Name'] == weapon:
-                if row['Affinity'] != "-":
-                    has_affinity = True
-                break
-
-    print(has_affinity)
-
-    has_2hbonus = False
-
-    with open("Extra_Data.csv", 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row['Name'] == weapon:
-                if row['2H Str Bonus'] == "Yes":
-                    has_2hbonus = True
-                break
-
-    print(has_2hbonus)
+    print(f"object test: {starting_class.getName()}")
+    print(f"Vigor: {starting_class.getVigor()}")
+    print(f"Strength: {starting_class.getStrength()}")
+    print(f"Soul Level: {starting_class.getSoul_level()}")
+    print(f"Weapon name: {weapon_extra_data.getName()}")
+    print(f"weapon max_upgrades: {max_upgrade_level}")
+    print(f"upgrade_level: {weapon_extra_data.getUpgradeLevel()}")
+    print(f"required_str: {weapon_extra_data.getRequiredStr()}")
+    print(f"weapon_type: {weapon_extra_data.getWeaponType()}")
+    print(f"passive1: {weapon_passive.getPassiveType1()}")
+    print(f"passive2: {weapon_passive.getPassiveType2()}")
 
 
+def main():
 
-
-
-
-
-
-
-
-
-
-
-
+    initData()
 
 
     #value_map = tryPoints()
