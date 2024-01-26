@@ -182,35 +182,59 @@ def calculate_dmg(current_str, current_dex, current_arc):
 
     return total_dmg
 
+def optimize():
+    return
+
+
+
+
+
 
 def initData():
 
     class_name = "Hero"
     weapon_name = "Great Stars"
-    affinity = "Blood"
+    affinity = "Occult"
 
     max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
     weapon_upgrade_level = 25
 
-    weapon = affinity + " " + weapon_name
+    if affinity != "":
+        weapon = affinity + " " + weapon_name
+    else:
+        weapon = weapon_name
+
     #is_2handing = False
 
     starting_class = DataReader.initStartingClass(class_name)
     weapon_extra_data = DataReader.initWeaponExtraData(weapon, weapon_upgrade_level)
     weapon_passive = DataReader.initWeaponPassive(weapon, weapon_upgrade_level)
+    weapon_attack = DataReader.initWeaponAttack(weapon, weapon_upgrade_level)
+    weapon_scaling = DataReader.initWeaponScaling(weapon, weapon_upgrade_level)
+    weapon_correct_id = DataReader.initWeaponCorrectId(weapon)
+    weapon_element_correct = DataReader.initWeaponElementCorrect(weapon_correct_id)
+
+    optimize()
 
 
-    print(f"object test: {starting_class.getName()}")
-    print(f"Vigor: {starting_class.getVigor()}")
-    print(f"Strength: {starting_class.getStrength()}")
-    print(f"Soul Level: {starting_class.getSoul_level()}")
+
+
+    print(f"Starting class: {starting_class.getName()}")
+    print(f"min Vigor: {starting_class.getMinVigor()}")
+    print(f"min Strength: {starting_class.getMinStrength()}")
+    print(f"min Soul Level: {starting_class.getMinSoul_level()}")
     print(f"Weapon name: {weapon_extra_data.getName()}")
     print(f"weapon max_upgrades: {max_upgrade_level}")
     print(f"upgrade_level: {weapon_extra_data.getUpgradeLevel()}")
+    print(f"2h bonus?: {weapon_extra_data.getTwoHandBonus()}")
     print(f"required_str: {weapon_extra_data.getRequiredStr()}")
     print(f"weapon_type: {weapon_extra_data.getWeaponType()}")
     print(f"passive1: {weapon_passive.getPassiveType1()}")
     print(f"passive2: {weapon_passive.getPassiveType2()}")
+    print(f"blood value: {weapon_passive.getBloodBase1()}")
+    print(f"Phys att: {weapon_attack.getPhysAttack()}")
+    print(f"str scaling: {weapon_scaling.getStrScaling()}")
+    print(f"weapon id: {weapon_correct_id.getAttackElementId()}")
 
 
 def main():
