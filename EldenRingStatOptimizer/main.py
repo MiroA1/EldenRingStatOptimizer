@@ -18,152 +18,9 @@ def calcPassiveArc(current_arc):
         return (10 * ((current_arc - 1) / 24)) / 100
 
 
-# def calcBloodloss(current_arc):
+# def optimize(calculator):
 #
-#     passive_arc = calcPassiveArc(current_arc)
-#
-#     bloodloss = (ARC_SCALING * (passive_arc * BLOOD_BASE)) + BLOOD_BASE
-#
-#     bloodloss_floored = int(bloodloss)
-#
-#     return bloodloss
-
-
-
-# def tryPoints():
-#
-#     combination_counter = 0
-#
-#     value_map = {}
-#
-#     current_str = 0
-#
-#     #if SCALING_COUNT == 3 and + TOTAL_SKILL_POINTS <= 99:
-#
-#     if MIN_STR + TOTAL_SKILL_POINTS <= 99:
-#         current_str = MIN_STR + TOTAL_SKILL_POINTS
-#
-#         max_str = current_str
-#         current_dex = 9
-#         current_arc = 11
-#
-#         stat_sum = current_str + current_dex + current_arc
-#         current_dmg = f"{calculate_dmg(current_str, current_dex, current_arc)} + ({calcBloodloss(current_arc)}) + stat_sum: {stat_sum}"
-#         attributes = f"str: {current_str}, dex: {current_dex}, arc: {current_arc} "
-#         value_map[attributes] = current_dmg
-#         combination_counter += 1
-#
-#         while current_str > MIN_STR:
-#
-#             current_str -= 1
-#             usable_points = max_str - current_str
-#             usable_points2 = usable_points
-#
-#             current_dex += usable_points
-#
-#             comb_count = 0
-#             while comb_count < usable_points + 1:
-#
-#                 stat_sum = current_str + current_dex + current_arc
-#                 current_dmg = f"{calculate_dmg(current_str, current_dex, current_arc)} + ({calcBloodloss(current_arc)}) + stat_sum: {stat_sum}"
-#                 current_dmg2 = f"{round(calculate_dmg(current_str, current_dex, current_arc) + calcBloodloss(current_arc), 3)} | dmg: {round(calculate_dmg(current_str, current_dex, current_arc), 5)} + ({round(calcBloodloss(current_arc), 3)})"
-#                 attributes = f"str: {current_str}, dex: {current_dex}, arc: {current_arc} "
-#                 value_map[attributes] = current_dmg2
-#                 combination_counter += 1
-#                 comb_count += 1
-#
-#                 current_dex = MIN_DEX
-#
-#                 current_dex += (usable_points2 - 1)
-#                 current_arc += 1
-#                 usable_points2 -= 1
-#
-#             current_dex = MIN_DEX
-#             current_arc = MIN_ARC
-#
-#     elif MIN_STR + TOTAL_SKILL_POINTS > 99:
-#         current_str = 99
-#         current_dex = (TOTAL_SKILL_POINTS - (99 - MIN_STR)) + MIN_DEX
-#
-#     print(f"COMBINATIONS: {combination_counter}")
-#     return value_map
-
-
-
-def calcCorrectStat_0(current_stat):
-
-    if current_stat > 80:
-        return 90 + 20 * ((current_stat - 80) / 70)
-    elif current_stat > 60:
-        return 75 + 15 * ((current_stat - 60) / 20)
-    elif current_stat > 18:
-        return 25 + 50 * (1 - (1 - (current_stat - 18) / 42) ** 1.2)
-    else:
-        return 25 * ((current_stat - 1) / 17) ** 1.2
-
-
-def calcCorrectStat_1(current_stat):
-
-    if current_stat > 80:
-        return 90 + 20 * ((current_stat - 80) / 70)
-    elif current_stat > 60:
-        return 75 + 15 * ((current_stat - 60) / 20)
-    elif current_stat > 20:
-        return 35 + 40 * (1 - (1 - (current_stat - 20) / 40) ** 1.2)
-    else:
-        return 35 * ((current_stat - 1) / 19) ** 1.2
-
-
-def calcCorrectStat_7(current_stat):
-
-    if current_stat > 80:
-        return 90 + 20 * ((current_stat - 80) / 70)
-    elif current_stat > 60:
-        return 75 + 15 * ((current_stat - 60) / 20)
-    elif current_stat > 20:
-        return 35 + 40 * (1 - (1 - (current_stat - 20) / 40) ** 1.2)
-    else:
-        return 35 * ((current_stat - 1) / 19) ** 1.2
-
-
-# def calculate_dmg(current_str, current_dex, current_arc):
-#
-#     true_base_dmg = BASE_DMG
-#
-#     if CALC_ID == 0:
-#         str_scale = calcCorrectStat_0(current_str)
-#         dex_scale = calcCorrectStat_0(current_dex)
-#         arc_scale = calcCorrectStat_0(current_arc)
-#
-#     elif CALC_ID == 1:
-#         str_scale = calcCorrectStat_1(current_str)
-#         dex_scale = calcCorrectStat_1(current_dex)
-#         arc_scale = calcCorrectStat_1(current_arc)
-#
-#     elif CALC_ID == 7:
-#         str_scale = calcCorrectStat_7(current_str)
-#         dex_scale = calcCorrectStat_7(current_dex)
-#         arc_scale = calcCorrectStat_7(current_arc)
-#
-#     if (current_str < MIN_STR_WEAPON) or (current_dex < MIN_DEX_WEAPON) or (current_arc < MIN_ARC_WEAPON):
-#         true_base_dmg = BASE_DMG * (-0.4)
-#         total_dmg = BASE_DMG + true_base_dmg
-#     else:
-#         total_phys_dmg = (true_base_dmg * STR_SCALING * (str_scale / 100)
-#                           + true_base_dmg * DEX_SCALING * (dex_scale / 100)
-#                           + true_base_dmg * ARC_SCALING * (arc_scale / 100))
-#         total_dmg = total_phys_dmg + true_base_dmg
-#
-#     total_dmg_floored = int(total_dmg)
-#
-#     return total_dmg
-
-
-def optimize(calculator):
-
-    return calculator.tryPoints()
-
-
+#     return calculator.tryPoints()
 
 
 
@@ -222,7 +79,8 @@ def main():
 
 
     calculator = initData()
-    value_map = optimize(calculator)
+    value_map = calculator.optimize()
+    #value_map = optimize(calculator)
 
 
     #value_map = tryPoints()

@@ -1,16 +1,6 @@
+import CalcModule
+import SwitchFunctions
 import WeaponCorrectId
-
-
-def calcCorrectStat_0(current_stat):
-
-    if current_stat > 80:
-        return 90 + 20 * ((current_stat - 80) / 70)
-    elif current_stat > 60:
-        return 75 + 15 * ((current_stat - 60) / 20)
-    elif current_stat > 18:
-        return 25 + 50 * (1 - (1 - (current_stat - 18) / 42) ** 1.2)
-    else:
-        return 25 * ((current_stat - 1) / 17) ** 1.2
 
 
 class Calculator:
@@ -59,44 +49,43 @@ class Calculator:
 
         return scaling_list
 
+
+
     def calculate_dmg(self):
 
-        true_base_dmg = self.weapon_attack.getPhysAttack()
+        # true_base_dmg = self.weapon_attack.getPhysAttack()
+        #
+        # if self.weapon_correct_id.getPhysCalcId() == 1:
+        #     str_scale = calcCorrectStat_0(self.starting_class.getCurrentStr())
+        #     dex_scale = calcCorrectStat_0(current_dex)
+        #     arc_scale = calcCorrectStat_0(current_arc)
+        #
+        # elif CALC_ID == 1:
+        #     str_scale = calcCorrectStat_1(current_str)
+        #     dex_scale = calcCorrectStat_1(current_dex)
+        #     arc_scale = calcCorrectStat_1(current_arc)
 
-        if self.weapon_correct_id.getPhysCalcId() == 1:
-            str_scale = calcCorrectStat_0(self.starting_class.getCurrentStr())
-            dex_scale = calcCorrectStat_0(current_dex)
-            arc_scale = calcCorrectStat_0(current_arc)
 
-        elif CALC_ID == 1:
-            str_scale = calcCorrectStat_1(current_str)
-            dex_scale = calcCorrectStat_1(current_dex)
-            arc_scale = calcCorrectStat_1(current_arc)
+        # if self.starting_class.getCurrentStr() < self.weapon.getRequiredStr():
+        #
+        #     true_base_dmg = self.weapon_attack.getPhysAttack() * (-0.4)
+        #     total_dmg = round(self.weapon_attack.getPhysAttack() + true_base_dmg, 5)
+        # else:
+        #     total_phys_dmg = (true_base_dmg * self.weapon_scaling.getStrScaling() * (str_scale / 100))
+        #                       # + true_base_dmg * DEX_SCALING * (dex_scale / 100)
+        #                       # + true_base_dmg * ARC_SCALING * (arc_scale / 100))
+        #     total_dmg = round(total_phys_dmg + true_base_dmg, 5)
 
-        elif CALC_ID == 7:
-            str_scale = calcCorrectStat_7(current_str)
-            dex_scale = calcCorrectStat_7(current_dex)
-            arc_scale = calcCorrectStat_7(current_arc)
 
-        if (self.starting_class.getCurrentStr() < self.weapon.getRequiredStr() or
-                self.starting_class.getCurrentDex() < self.weapon.getRequiredDex() or
-                self.starting_class.getCurrentInt() < self.weapon.getRequiredInt() or
-                self.starting_class.getCurrentFai() < self.weapon.getRequiredFai() or
-                self.starting_class.getCurrentArc() < self.weapon.getRequiredArc()):
-
-            true_base_dmg = self.weapon_attack.getPhysAttack() * (-0.4)
-            total_dmg = round(self.weapon_attack.getPhysAttack() + true_base_dmg, 5)
-        else:
-            total_phys_dmg = (true_base_dmg * self.weapon_scaling.getStrScaling() * (str_scale / 100))
-                              # + true_base_dmg * DEX_SCALING * (dex_scale / 100)
-                              # + true_base_dmg * ARC_SCALING * (arc_scale / 100))
-            total_dmg = round(total_phys_dmg + true_base_dmg, 5)
-
-        total_dmg_floored = int(total_dmg)
+        total_dmg = (CalcModule.calcPhysDamage(self) + self.weapon_attack.getPhysAttack() +
+                     self.calcMagDamage() + self.weapon_attack.getMagAttack() +
+                     self.calcFireDamage() + self.weapon_attack.getFireAttack() +
+                     self.calcLighDamage() + self.weapon_attack.getLighAttack() +
+                     self.calcHolyDamage() + self.weapon_attack.getHolyAttack())
 
         return total_dmg
 
-    def tryPoints(self):
+    def optimize(self):
 
         combination_counter = 0
         value_map = {}
