@@ -8,7 +8,7 @@ class Calculator:
              weapon_scaling, weapon_correct_id, weapon_element_correct):
 
         self.starting_class = starting_class
-        self.weapon = weapon_extra_data
+        self.weapon_extra_data = weapon_extra_data
         self.weapon_passive = weapon_passive
         self.weapon_attack = weapon_attack
         self.weapon_scaling = weapon_scaling
@@ -76,12 +76,37 @@ class Calculator:
         #                       # + true_base_dmg * ARC_SCALING * (arc_scale / 100))
         #     total_dmg = round(total_phys_dmg + true_base_dmg, 5)
 
+        if self.starting_class.getCurrentStr() < self.weapon_extra_data.getRequiredStr():
+            str_req_met = 0
+        else:
+            str_req_met = 1
 
-        total_dmg = (CalcModule.calcPhysDamage(self) + self.weapon_attack.getPhysAttack() +
-                     self.calcMagDamage() + self.weapon_attack.getMagAttack() +
-                     self.calcFireDamage() + self.weapon_attack.getFireAttack() +
-                     self.calcLighDamage() + self.weapon_attack.getLighAttack() +
-                     self.calcHolyDamage() + self.weapon_attack.getHolyAttack())
+        if self.starting_class.getCurrentDex() < self.weapon_extra_data.getRequiredDex():
+            dex_req_met = 0
+        else:
+            dex_req_met = 1
+
+        if self.starting_class.getCurrentInt() < self.weapon_extra_data.getRequiredInt():
+            int_req_met = 0
+        else:
+            int_req_met = 1
+
+        if self.starting_class.getCurrentFai() < self.weapon_extra_data.getRequiredFai():
+            fai_req_met = 0
+        else:
+            fai_req_met = 1
+
+        if self.starting_class.getCurrentArc() < self.weapon_extra_data.getRequiredArc():
+            arc_req_met = 0
+        else:
+            arc_req_met = 1
+
+
+        total_dmg = (CalcModule.calcPhysDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getPhysAttack() +
+                     CalcModule.calcMagDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getMagAttack() +
+                     CalcModule.calcFireDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getFireAttack() +
+                     CalcModule.calcLighDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getLighAttack() +
+                     CalcModule.calcHolyDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getHolyAttack())
 
         return total_dmg
 
@@ -121,6 +146,7 @@ class Calculator:
         #         else:
         #             self.starting_class.setCurrentArc(self.starting_class.getMinArc() + allocated_points)
 
+        # TODO: väärä approach, ei toimi pitää testata että requirementit täyttyy
         if scaling_count == 1:
             attribute = scaling_list[0]
             min_value = getattr(self.starting_class, f'getMin{attribute}')()

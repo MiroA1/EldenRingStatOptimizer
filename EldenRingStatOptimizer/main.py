@@ -4,7 +4,15 @@ import DataReader
 
 TOTAL_SKILL_POINTS = 70
 
-
+# def calcBloodloss(current_arc):
+#
+#     passive_arc = calcPassiveArc(current_arc)
+#
+#     bloodloss = (ARC_SCALING * (passive_arc * BLOOD_BASE)) + BLOOD_BASE
+#
+#     bloodloss_floored = int(bloodloss)
+#
+#     return bloodloss
 
 def calcPassiveArc(current_arc):
 
