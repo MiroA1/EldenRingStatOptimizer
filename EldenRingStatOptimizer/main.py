@@ -1,31 +1,8 @@
-import csv
 from StartingClass import StartingClass
 import Calculator
 import DataReader
 
 TOTAL_SKILL_POINTS = 70
-
-# TODO: Morgott's cursed sword | blood affinity
-# TODO: pick needed attributes from dict
-SCALING_ATTRIBUTES = {"str": "0.27", "dex": "1.08", "arc": "0.54"}
-SCALING_COUNT = 3
-BASE_DMG = 294
-BLOOD_BASE = 60
-CALC_ID = 7
-STR_SCALING = 0.27
-DEX_SCALING = 1.08
-ARC_SCALING = 0.54
-MIN_STR_WEAPON = 14
-MIN_DEX_WEAPON = 35
-MIN_ARC_WEAPON = 17
-
-
-# TODO: Starting class (Hero)
-MIN_STR = 16
-MIN_DEX = 9
-MIN_INT = 7
-MIN_FAITH = 8
-MIN_ARC = 11
 
 
 
@@ -182,8 +159,10 @@ def calculate_dmg(current_str, current_dex, current_arc):
 
     return total_dmg
 
-def optimize():
-    return
+
+def optimize(calculator):
+
+    calculator.tryPoints()
 
 
 
@@ -195,6 +174,7 @@ def initData():
     class_name = "Hero"
     weapon_name = "Great Stars"
     affinity = "Occult"
+    is_2handing = False
 
     max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
     weapon_upgrade_level = 25
@@ -204,17 +184,17 @@ def initData():
     else:
         weapon = weapon_name
 
-    #is_2handing = False
 
     starting_class = DataReader.initStartingClass(class_name)
-    weapon_extra_data = DataReader.initWeaponExtraData(weapon, weapon_upgrade_level)
+    weapon_extra_data = DataReader.initWeaponExtraData(weapon, weapon_upgrade_level, is_2handing)
     weapon_passive = DataReader.initWeaponPassive(weapon, weapon_upgrade_level)
     weapon_attack = DataReader.initWeaponAttack(weapon, weapon_upgrade_level)
     weapon_scaling = DataReader.initWeaponScaling(weapon, weapon_upgrade_level)
     weapon_correct_id = DataReader.initWeaponCorrectId(weapon)
     weapon_element_correct = DataReader.initWeaponElementCorrect(weapon_correct_id)
 
-    optimize()
+    calculator = Calculator.Calculator(starting_class, weapon_extra_data, weapon_passive, weapon_attack,
+             weapon_scaling, weapon_correct_id, weapon_element_correct)
 
 
 
@@ -236,10 +216,14 @@ def initData():
     print(f"str scaling: {weapon_scaling.getStrScaling()}")
     print(f"weapon id: {weapon_correct_id.getAttackElementId()}")
 
+    return calculator
+
 
 def main():
 
-    initData()
+
+    calculator = initData()
+    value_map = optimize(calculator)
 
 
     #value_map = tryPoints()

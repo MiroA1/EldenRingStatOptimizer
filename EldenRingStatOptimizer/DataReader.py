@@ -16,7 +16,7 @@ import WeaponScaling
 
 def initStartingClass(class_name):
 
-    with open("StartingClasses.csv", 'r') as csv_file:
+    with open("Data/StartingClasses.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Class'] == class_name:
@@ -37,7 +37,7 @@ def initStartingClass(class_name):
 
 def getWeaponMaxUpgradeLevel(weapon_name):
 
-    with open("Extra_Data.csv", 'r') as csv_file:
+    with open("Data/ExtraData.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Name'] == weapon_name:
@@ -47,9 +47,9 @@ def getWeaponMaxUpgradeLevel(weapon_name):
     return max_upgrade_level
 
 
-def initWeaponExtraData(weapon_name, weapon_upgrade_level):
+def initWeaponExtraData(weapon_name, weapon_upgrade_level, is_2handing):
 
-    with open("Extra_Data.csv", 'r') as csv_file:
+    with open("Data/ExtraData.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Name'] == weapon_name:
@@ -63,7 +63,8 @@ def initWeaponExtraData(weapon_name, weapon_upgrade_level):
                 break
 
     return WeaponExtraData.Weapon(weapon_name, weapon_upgrade_level,
-                              required_str, required_dex, required_int, required_fai, required_arc, two_hand_bonus, weapon_type)
+                              required_str, required_dex, required_int, required_fai, required_arc,
+                                  two_hand_bonus, weapon_type, is_2handing)
 
 
 def initWeaponPassive(weapon_name, weapon_upgrade_level):
@@ -81,7 +82,7 @@ def initWeaponPassive(weapon_name, weapon_upgrade_level):
     poison_base2 = 0
     blood_base2 = 0
 
-    with open("Passive.csv", 'r') as csv_file:
+    with open("Data/Passive.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Name'] == weapon_name:
@@ -129,7 +130,7 @@ def initWeaponAttack(weapon_name, weapon_upgrade_level):
         ligh_attack = 0
         holy_attack = 0
 
-        with open("Attack.csv", 'r') as csv_file:
+        with open("Data/Attack.csv", 'r') as csv_file:
             reader = csv.DictReader(csv_file)
             for row in reader:
                 if row['Name'] == weapon_name:
@@ -145,7 +146,7 @@ def initWeaponAttack(weapon_name, weapon_upgrade_level):
 
 def initWeaponScaling(weapon_name, weapon_upgrade_level):
 
-    with open("Scaling.csv", 'r') as csv_file:
+    with open("Data/Scaling.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Name'] == weapon_name:
@@ -161,7 +162,7 @@ def initWeaponScaling(weapon_name, weapon_upgrade_level):
 
 def initWeaponCorrectId(weapon_name):
 
-    with open("CalcCorrectGraph_ID.csv", 'r') as csv_file:
+    with open("Data/CalcCorrectGraph_ID.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Name'] == weapon_name:
@@ -205,7 +206,7 @@ def initWeaponElementCorrect(weapon_correct_id):
     holy_scales_on_arc = 0
 
 
-    with open("AttackElementCorrectParam.csv", 'r') as csv_file:
+    with open("Data/AttackElementCorrectParam.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['ID'] == weapon_correct_id:

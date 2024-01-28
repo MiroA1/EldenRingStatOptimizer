@@ -65,23 +65,52 @@ class StartingClass:
     def getCurrentEndurance(self):
         return self.current_endurance
 
-    def getCurrentStrength(self):
+    def getCurrentStr(self):
         return self.current_str
 
-    def getCurrentDexterity(self):
+    def getCurrentDex(self):
         return self.current_dex
 
-    def getCurrentIntelligence(self):
+    def getCurrentInt(self):
         return self.current_int
 
-    def getCurrentFaith(self):
+    def getCurrentFai(self):
         return self.current_fai
 
-    def getCurrentArcane(self):
+    def getCurrentArc(self):
         return self.current_arc
 
     def getCurrentSoul_level(self):
         return self.current_soul_level
+
+    def setCurrentVigor(self, current_vigor):
+        self.current_vigor = current_vigor
+
+    def setCurrentMind(self, current_mind):
+        self.current_mind = current_mind
+
+    def setCurrentEndurance(self, current_endurance):
+        self.current_endurance = current_endurance
+
+    def setCurrentStr(self, current_str):
+        self.current_str = current_str
+
+    def setCurrentDex(self, current_dex):
+        self.current_dex = current_dex
+
+    def setCurrentInt(self, current_int):
+        self.current_int = current_int
+
+    def setCurrentFai(self, current_fai):
+        self.current_fai = current_fai
+
+    def setCurrentArc(self, current_arc):
+        self.current_arc = current_arc
+
+    def setCurrentSoul_level(self, current_soul_level):
+        self.current_soul_level = current_soul_level
+
+
 
 
 

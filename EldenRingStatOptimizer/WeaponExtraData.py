@@ -1,6 +1,7 @@
 
 class Weapon:
-    def __init__(self, name, upgrade_level, required_str, required_dex, required_int, required_fai, required_arc, two_hand_bonus, weapon_type):
+    def __init__(self, name, upgrade_level, required_str, required_dex, required_int, required_fai, required_arc,
+                 two_hand_bonus, weapon_type, is_2handing):
 
         self.name = name
         self.upgrade_level = upgrade_level
@@ -11,6 +12,7 @@ class Weapon:
         self.required_arc = required_arc
         self.two_hand_bonus = two_hand_bonus
         self.weapon_type = weapon_type
+        self.is_2handing = is_2handing
 
 
     def getName(self):
@@ -39,6 +41,9 @@ class Weapon:
 
     def getWeaponType(self):
         return self.weapon_type
+
+    def getIs2handing(self):
+        return self.is_2handing
 
 
 
