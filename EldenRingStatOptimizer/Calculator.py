@@ -1,5 +1,18 @@
 import WeaponCorrectId
 
+
+def calcCorrectStat_0(current_stat):
+
+    if current_stat > 80:
+        return 90 + 20 * ((current_stat - 80) / 70)
+    elif current_stat > 60:
+        return 75 + 15 * ((current_stat - 60) / 20)
+    elif current_stat > 18:
+        return 25 + 50 * (1 - (1 - (current_stat - 18) / 42) ** 1.2)
+    else:
+        return 25 * ((current_stat - 1) / 17) ** 1.2
+
+
 class Calculator:
     def __init__(self, starting_class, weapon_extra_data, weapon_passive, weapon_attack,
              weapon_scaling, weapon_correct_id, weapon_element_correct):
@@ -44,24 +57,14 @@ class Calculator:
             scaling_count += 1
             scaling_list.append("Arc")
 
-            return scaling_list
+        return scaling_list
 
-    def calcCorrectStat_0(self, current):
-
-        if self.starting_class.getCu 80:
-            return 90 + 20 * ((self - 80) / 70)
-        elif self > 60:
-            return 75 + 15 * ((self - 60) / 20)
-        elif self > 18:
-            return 25 + 50 * (1 - (1 - (self - 18) / 42) ** 1.2)
-        else:
-            return 25 * ((self - 1) / 17) ** 1.2
     def calculate_dmg(self):
 
         true_base_dmg = self.weapon_attack.getPhysAttack()
 
-        if self.weapon_correct_id.getAttackElementId() == 0:
-            str_scale = calcCorrectStat_0(current_str)
+        if self.weapon_correct_id.getPhysCalcId() == 1:
+            str_scale = calcCorrectStat_0(self.starting_class.getCurrentStr())
             dex_scale = calcCorrectStat_0(current_dex)
             arc_scale = calcCorrectStat_0(current_arc)
 
@@ -75,16 +78,19 @@ class Calculator:
             dex_scale = calcCorrectStat_7(current_dex)
             arc_scale = calcCorrectStat_7(current_arc)
 
-        if (current_str < MIN_STR_WEAPON) or (current_dex < MIN_DEX_WEAPON) or (
-                current_arc < MIN_ARC_WEAPON):
-            true_base_dmg = BASE_DMG * (-0.4)
-            total_dmg = BASE_DMG + true_base_dmg
+        if (self.starting_class.getCurrentStr() < self.weapon.getRequiredStr() or
+                self.starting_class.getCurrentDex() < self.weapon.getRequiredDex() or
+                self.starting_class.getCurrentInt() < self.weapon.getRequiredInt() or
+                self.starting_class.getCurrentFai() < self.weapon.getRequiredFai() or
+                self.starting_class.getCurrentArc() < self.weapon.getRequiredArc()):
+
+            true_base_dmg = self.weapon_attack.getPhysAttack() * (-0.4)
+            total_dmg = round(self.weapon_attack.getPhysAttack() + true_base_dmg, 5)
         else:
-            # TODO: Add int and faith
-            total_phys_dmg = (true_base_dmg * STR_SCALING * (str_scale / 100)
-                              + true_base_dmg * DEX_SCALING * (dex_scale / 100)
-                              + true_base_dmg * ARC_SCALING * (arc_scale / 100))
-            total_dmg = total_phys_dmg + true_base_dmg
+            total_phys_dmg = (true_base_dmg * self.weapon_scaling.getStrScaling() * (str_scale / 100))
+                              # + true_base_dmg * DEX_SCALING * (dex_scale / 100)
+                              # + true_base_dmg * ARC_SCALING * (arc_scale / 100))
+            total_dmg = round(total_phys_dmg + true_base_dmg, 5)
 
         total_dmg_floored = int(total_dmg)
 
@@ -94,7 +100,7 @@ class Calculator:
 
         combination_counter = 0
         value_map = {}
-        allocated_points = 0
+        allocated_points = 90
 
         scaling_list = self.getScalingCount()
         scaling_count = len(scaling_list)
@@ -133,53 +139,55 @@ class Calculator:
             setattr(self.starting_class, f'setCurrent{attribute}', current_value)
 
             current_dmg = self.calculate_dmg()
-            attributes = f"{scaling_list[0]}: {max_stat}"
-            value_map[scaling_list[0]] =  current_dmg
-            return value_map
-
-        if MIN_STR + TOTAL_SKILL_POINTS <= 99:
-            current_str = MIN_STR + TOTAL_SKILL_POINTS
-
-            max_str = current_str
-            current_dex = 9
-            current_arc = 11
-
-            stat_sum = current_str + current_dex + current_arc
-            current_dmg = f"{calculate_dmg(current_str, current_dex, current_arc)} + ({calcBloodloss(current_arc)}) + stat_sum: {stat_sum}"
-            attributes = f"str: {current_str}, dex: {current_dex}, arc: {current_arc} "
+            attributes = f"{scaling_list[0]}: {current_value}"
             value_map[attributes] = current_dmg
             combination_counter += 1
+            print(f"COMBINATIONS: {combination_counter}")
+            return value_map
 
-            while current_str > MIN_STR:
-
-                current_str -= 1
-                usable_points = max_str - current_str
-                usable_points2 = usable_points
-
-                current_dex += usable_points
-
-                comb_count = 0
-                while comb_count < usable_points + 1:
-                    stat_sum = current_str + current_dex + current_arc
-                    current_dmg = f"{calculate_dmg(current_str, current_dex, current_arc)} + ({calcBloodloss(current_arc)}) + stat_sum: {stat_sum}"
-                    current_dmg2 = f"{round(calculate_dmg(current_str, current_dex, current_arc) + calcBloodloss(current_arc), 3)} | dmg: {round(calculate_dmg(current_str, current_dex, current_arc), 5)} + ({round(calcBloodloss(current_arc), 3)})"
-                    attributes = f"str: {current_str}, dex: {current_dex}, arc: {current_arc} "
-                    value_map[attributes] = current_dmg2
-                    combination_counter += 1
-                    comb_count += 1
-
-                    current_dex = MIN_DEX
-
-                    current_dex += (usable_points2 - 1)
-                    current_arc += 1
-                    usable_points2 -= 1
-
-                current_dex = MIN_DEX
-                current_arc = MIN_ARC
-
-        elif MIN_STR + TOTAL_SKILL_POINTS > 99:
-            current_str = 99
-            current_dex = (TOTAL_SKILL_POINTS - (99 - MIN_STR)) + MIN_DEX
+        # if MIN_STR + TOTAL_SKILL_POINTS <= 99:
+        #     current_str = MIN_STR + TOTAL_SKILL_POINTS
+        #
+        #     max_str = current_str
+        #     current_dex = 9
+        #     current_arc = 11
+        #
+        #     stat_sum = current_str + current_dex + current_arc
+        #     current_dmg = f"{calculate_dmg(current_str, current_dex, current_arc)} + ({calcBloodloss(current_arc)}) + stat_sum: {stat_sum}"
+        #     attributes = f"str: {current_str}, dex: {current_dex}, arc: {current_arc} "
+        #     value_map[attributes] = current_dmg
+        #     combination_counter += 1
+        #
+        #     while current_str > MIN_STR:
+        #
+        #         current_str -= 1
+        #         usable_points = max_str - current_str
+        #         usable_points2 = usable_points
+        #
+        #         current_dex += usable_points
+        #
+        #         comb_count = 0
+        #         while comb_count < usable_points + 1:
+        #             stat_sum = current_str + current_dex + current_arc
+        #             current_dmg = f"{calculate_dmg(current_str, current_dex, current_arc)} + ({calcBloodloss(current_arc)}) + stat_sum: {stat_sum}"
+        #             current_dmg2 = f"{round(calculate_dmg(current_str, current_dex, current_arc) + calcBloodloss(current_arc), 3)} | dmg: {round(calculate_dmg(current_str, current_dex, current_arc), 5)} + ({round(calcBloodloss(current_arc), 3)})"
+        #             attributes = f"str: {current_str}, dex: {current_dex}, arc: {current_arc} "
+        #             value_map[attributes] = current_dmg2
+        #             combination_counter += 1
+        #             comb_count += 1
+        #
+        #             current_dex = MIN_DEX
+        #
+        #             current_dex += (usable_points2 - 1)
+        #             current_arc += 1
+        #             usable_points2 -= 1
+        #
+        #         current_dex = MIN_DEX
+        #         current_arc = MIN_ARC
+        #
+        # elif MIN_STR + TOTAL_SKILL_POINTS > 99:
+        #     current_str = 99
+        #     current_dex = (TOTAL_SKILL_POINTS - (99 - MIN_STR)) + MIN_DEX
 
         print(f"COMBINATIONS: {combination_counter}")
         return value_map

@@ -3,15 +3,15 @@ class StartingClass:
     def __init__(self, class_name, min_vigor, min_mind, min_endurance, min_strength, min_dexterity, min_intelligence, min_faith, min_arcane, min_soul_level):
 
         self.class_name = class_name
-        self.vigor = min_vigor
-        self.mind = min_mind
-        self.endurance = min_endurance
-        self.strength = min_strength
-        self.dexterity = min_dexterity
-        self.intelligence = min_intelligence
-        self.faith = min_faith
-        self.arcane = min_arcane
-        self.soul_level = min_soul_level
+        self.min_vigor = min_vigor
+        self.min_mind = min_mind
+        self.min_endurance = min_endurance
+        self.min_str = min_strength
+        self.min_dex = min_dexterity
+        self.min_int = min_intelligence
+        self.min_fai = min_faith
+        self.min_arc = min_arcane
+        self.min_soul_level = min_soul_level
 
         #Current Stats
         self.current_vigor = min_vigor
@@ -30,31 +30,31 @@ class StartingClass:
         return self.class_name
 
     def getMinVigor(self):
-        return self.vigor
+        return self.min_vigor
 
     def getMinMind(self):
-        return self.mind
+        return self.min_mind
 
     def getMinEndurance(self):
-        return self.endurance
+        return self.min_endurance
 
-    def getMinStrength(self):
-        return self.strength
+    def getMinStr(self):
+        return self.min_str
 
-    def getMinDexterity(self):
-        return self.dexterity
+    def getMinDex(self):
+        return self.min_dex
 
-    def getMinIntelligence(self):
-        return self.intelligence
+    def getMinInt(self):
+        return self.min_int
 
-    def getMinFaith(self):
-        return self.faith
+    def getMinFai(self):
+        return self.min_fai
 
-    def getMinArcane(self):
-        return self.arcane
+    def getMinArc(self):
+        return self.min_arc
 
     def getMinSoul_level(self):
-        return self.soul_level
+        return self.min_soul_level
 
     def getCurrentVigor(self):
         return self.current_vigor

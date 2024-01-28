@@ -115,7 +115,6 @@ def initWeaponPassive(weapon_name, weapon_upgrade_level):
                 elif passive_type2 == "Blood":
                     blood_base2 = row[f"Blood +{weapon_upgrade_level}"]
 
-                break
 
 
     return WeaponPassive.WeaponPassive(passive_type1, passive_type2, rot_mad_sleep1, rot_mad_sleep2,
@@ -134,12 +133,12 @@ def initWeaponAttack(weapon_name, weapon_upgrade_level):
             reader = csv.DictReader(csv_file)
             for row in reader:
                 if row['Name'] == weapon_name:
-                    phys_attack = float(row[f"Phys +{weapon_upgrade_level}"])
+                    phys_attack = float(row[f"Phys +{str(weapon_upgrade_level)}"])
                     mag_attack = float(row[f"Mag +{weapon_upgrade_level}"])
                     fire_attack = float(row[f"Fire +{weapon_upgrade_level}"])
                     ligh_attack = float(row[f"Ligh +{weapon_upgrade_level}"])
                     holy_attack = float(row[f"Holy +{weapon_upgrade_level}"])
-                break
+
 
         return WeaponAttack.WeaponAttack(phys_attack, mag_attack, fire_attack, ligh_attack, holy_attack)
 
@@ -155,7 +154,6 @@ def initWeaponScaling(weapon_name, weapon_upgrade_level):
                 int_scaling = float(row[f"Int +{weapon_upgrade_level}"])
                 fai_scaling = float(row[f"Fai +{weapon_upgrade_level}"])
                 arc_scaling = float(row[f"Arc +{weapon_upgrade_level}"])
-                break
 
     return WeaponScaling.WeaponScaling(str_scaling, dex_scaling, int_scaling, fai_scaling, arc_scaling)
 
@@ -172,7 +170,6 @@ def initWeaponCorrectId(weapon_name):
                 ligh_calc_id = int(row["Lightning"])
                 holy_calc_id = int(row["Holy"])
                 attack_element_id = int(row["AttackElementCorrect ID"])
-                break
 
     return WeaponCorrectId.WeaponCorrectId(phys_calc_id, mag_calc_id, fire_calc_id, ligh_calc_id, holy_calc_id, attack_element_id)
 
@@ -240,7 +237,6 @@ def initWeaponElementCorrect(weapon_correct_id):
                 holy_scales_on_fai = int(row["isFaithCorrect_byDark"])
                 holy_scales_on_arc = int(row["isLuckCorrect_byDark"])
 
-                break
 
     return WeaponElementCorrect.WeaponElementCorrect(phys_scales_on_str, phys_scales_on_dex, phys_scales_on_int, phys_scales_on_fai, phys_scales_on_arc,
                                              mag_scales_on_str, mag_scales_on_dex, mag_scales_on_int, mag_scales_on_fai, mag_scales_on_arc,
