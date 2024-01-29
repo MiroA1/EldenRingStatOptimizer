@@ -102,10 +102,10 @@ class Calculator:
 
         index = 0
 
-        # Use all allocates points starting from the first (str)
         for stat in scaling_list:
             print(f"Start of loop {stat}: {getattr(self.starting_class, f'getMin{stat}')()}")
 
+        # Use all allocates points starting from the first (str)
         while index < len(scaling_list):
             if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + allocated_points > 99:
 
@@ -122,9 +122,36 @@ class Calculator:
                 #setattr(self.starting_class, f'setCurrent{scaling_list[index]}', (self.starting_class, min_stat + allocated_points))
                 print(f"Current {scaling_list[index]}: {getattr(self.starting_class, f'getCurrent{scaling_list[index]}')()}")
 
-            #print(self.calculate_dmg())
-            #combination_counter += 1
             index += 1
+            #print(self.calculate_dmg())
+
+        index = 0
+        while index < len(scaling_list):
+            if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() == 99:
+                index += 1
+                continue
+            else:
+                if getattr(self.starting_class, f'getCurrent{scaling_list[len(scaling_list) - 1]}')() < 99:
+                    # if getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() == 99:
+                    #     index += 1
+                    #     continue
+                    #else:
+                    while (getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() > getattr(self.starting_class, f'getMin{scaling_list[index]}')()
+                           and getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() < 99):
+                        attribute_setters[scaling_list[index - 1]](getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() - 1)
+                        attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + 1)
+                        stat_string = ', '.join(
+                            f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                            for stat in scaling_list)
+                        value_map[stat_string] = self.calculate_dmg()
+                        combination_counter += 1
+                index += 1
+
+
+        stat_string = ', '.join(f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}" for stat in scaling_list)
+        #print(stat_string)
+
+
 
 
 
