@@ -101,12 +101,12 @@ def main():
     # for key, value in sorted_values.items():
     #     print(f"{key}: {value}")
 
-    # TODO: Sort by damage + bloodloss
+    # TODO: Sort by damage + passives
     # sorted_values = dict(sorted(value_map.items(), key=lambda item: (str(item[1]), item[1])))
     # for key, value in sorted_values.items():
     #     print(f"{key}: {value}")
 
-    # TODO: Find best combined, best phys dmg, first high bloodloss, stats divided by 10 (soft caps)
+    # TODO: Find best combined, best total dmg, first high passive, stats divided by 10 (soft caps)
 
 
 if __name__ == "__main__":
