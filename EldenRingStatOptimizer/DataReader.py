@@ -206,7 +206,7 @@ def initWeaponElementCorrect(weapon_correct_id):
     with open("Data/AttackElementCorrectParam.csv", 'r') as csv_file:
         reader = csv.DictReader(csv_file)
         for row in reader:
-            if row['ID'] == weapon_correct_id:
+            if row['ID'] == str(weapon_correct_id.getAttackElementId()):
                 phys_scales_on_str = int(row["isStrengthCorrect_byPhysics"])
                 phys_scales_on_dex = int(row["isDexterityCorrect_byPhysics"])
                 phys_scales_on_int = int(row["isMagicCorrect_byPhysics"])

@@ -53,29 +53,6 @@ class Calculator:
 
     def calculate_dmg(self):
 
-        # true_base_dmg = self.weapon_attack.getPhysAttack()
-        #
-        # if self.weapon_correct_id.getPhysCalcId() == 1:
-        #     str_scale = calcCorrectStat_0(self.starting_class.getCurrentStr())
-        #     dex_scale = calcCorrectStat_0(current_dex)
-        #     arc_scale = calcCorrectStat_0(current_arc)
-        #
-        # elif CALC_ID == 1:
-        #     str_scale = calcCorrectStat_1(current_str)
-        #     dex_scale = calcCorrectStat_1(current_dex)
-        #     arc_scale = calcCorrectStat_1(current_arc)
-
-
-        # if self.starting_class.getCurrentStr() < self.weapon.getRequiredStr():
-        #
-        #     true_base_dmg = self.weapon_attack.getPhysAttack() * (-0.4)
-        #     total_dmg = round(self.weapon_attack.getPhysAttack() + true_base_dmg, 5)
-        # else:
-        #     total_phys_dmg = (true_base_dmg * self.weapon_scaling.getStrScaling() * (str_scale / 100))
-        #                       # + true_base_dmg * DEX_SCALING * (dex_scale / 100)
-        #                       # + true_base_dmg * ARC_SCALING * (arc_scale / 100))
-        #     total_dmg = round(total_phys_dmg + true_base_dmg, 5)
-
         if self.starting_class.getCurrentStr() < self.weapon_extra_data.getRequiredStr():
             str_req_met = 0
         else:
@@ -100,7 +77,6 @@ class Calculator:
             arc_req_met = 0
         else:
             arc_req_met = 1
-
 
         total_dmg = (CalcModule.calcPhysDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getPhysAttack() +
                      CalcModule.calcMagDamage(self, str_req_met, dex_req_met, int_req_met, fai_req_met, arc_req_met) + self.weapon_attack.getMagAttack() +
