@@ -1,5 +1,5 @@
 import CalcModule
-from itertools import product
+import math
 from collections import OrderedDict
 
 class Calculator:
@@ -86,18 +86,8 @@ class Calculator:
         #print(self.starting_class.getCurrentStr())
         return round(total_dmg, 5)
 
-    # def generate_combinations(self, scaling_list, allocated_points, max_stat_value):
-    #     return product(range(min(allocated_points + 1, max_stat_value + 1)),
-    #                    repeat=len(scaling_list))
 
-    def calculate_stat_diff_sum(self, stats_dict):
-        return sum(
-            stats_dict[stat] - getattr(self.starting_class, f"getMin{stat}")()
-            for stat in stats_dict
-        )
 
-    def is_valid_combination(self, stats_dict, allocated_points):
-        return self.calculate_stat_diff_sum(stats_dict) == allocated_points
 
     def optimize(self):
         combination_counter = 0
@@ -107,135 +97,11 @@ class Calculator:
 
         scaling_list = self.getScalingCount()
 
-        for allocated_value in range(allocated_points + 1):
-            print(f"allocated points = {allocated_value}")
-            print("combinations:")
-
-            for combination in product(range(min(allocated_value + 1, max_stat_value + 1)),
-                                       repeat=len(scaling_list)):
-                stats_dict = OrderedDict(zip(scaling_list, combination))
-
-                if self.is_valid_combination(stats_dict, allocated_value):
-                    print(', '.join(
-                        f"{stat}: {value}" for stat, value in stats_dict.items()))
-                    combination_counter += 1
-                    current_dmg = self.calculate_dmg()  # Replace with your actual calculation
-                    stats = ', '.join(
-                        f"{stat}: {value}" for stat, value in stats_dict.items())
-                    value_map[stats] = current_dmg
-
-        print(f"Total combinations: {combination_counter}")
-
-    # def optimize(self):
-    #
-    #     combination_counter = 0
-    #     value_map = {}
-    #     allocated_points = 1
-    #     max_stat_value = 99
-    #
-    #     scaling_list = self.getScalingCount()
-    #     #print(scaling_list)
-    #     #scaling_count = len(scaling_list)
-    #
-    #     for combination in self.generate_combinations(scaling_list, allocated_points,
-    #                                                   max_stat_value):
-    #
-    #         if self.is_valid_combination(combination, allocated_points, max_stat_value):
-    #             stats_dict = OrderedDict(zip(scaling_list, combination))
-    #
-    #             for stat, stat_value in stats_dict.items():
-    #                 print(stats_dict)
-    #                 #setattr(self.starting_class, f'setCurrent{stat}', value)
-    #                 if stat == "Str":
-    #                     self.starting_class.setCurrentStr(stat_value)
-    #                 elif stat == "Dex":
-    #                     self.starting_class.setCurrentDex(stat_value)
-    #                 elif stat == "Int":
-    #                     self.starting_class.setCurrentInt(stat_value)
-    #                 elif stat == "Fai":
-    #                     self.starting_class.setCurrentFai(stat_value)
-    #                 elif stat == "Arc":
-    #                     self.starting_class.setCurrentArc(stat_value)
-    #
-    #             current_dmg = self.calculate_dmg()
-    #             combination_counter += 1
-    #             stats = ', '.join(
-    #                 f"{stat}: {stat_value}" for stat, stat_value in stats_dict.items())
-    #             value_map[stats] = current_dmg
 
 
-        # for combination in product(range(min(allocated_points + 1, max_stat_value + 1)),
-        #                            repeat=len(scaling_list)):
-        #     if sum(combination) == allocated_points:
-        #         stats_dict = dict(zip(scaling_list, combination))
-        #
-        #         # Check if the combination satisfies the minimum value condition for each stat
-        #         if all(
-        #                 combination[idx] >= getattr(self.starting_class,
-        #                                             f'getCurrent{stat}')()
-        #                 for idx, stat in enumerate(scaling_list)
-        #         ):
-        #             print("Condition Passed!")
-        #             combination_counter += 1
-        #
-        #             # Adjust stats dynamically based on the combination
-        #             for stat, value in stats_dict.items():
-        #                 current_value = getattr(self.starting_class,
-        #                                         f'getCurrent{stat}')()
-        #
-        #                 setattr(self.starting_class, f'setCurrent{stat}',
-        #                         current_value + value)
-        #
-        #             current_dmg = self.calculate_dmg()
-        #             key = ', '.join(
-        #                 f"{stat}: {value}" for stat, value in stats_dict.items())
-        #             value_map[key] = current_dmg
-        #
-        #             # Reset stats to their original values after calculating damage
-        #             for stat, value in stats_dict.items():
-        #                 current_value = getattr(self.starting_class,
-        #                                         f'getCurrent{stat}')()
-        #                 setattr(self.starting_class, f'setCurrent{stat}',
-        #                         current_value - value)
-
-        # for combination in product(range(min(allocated_points + 1, max_stat_value + 1)),
-        #                            repeat=len(scaling_list)):
-        #     if sum(combination) == allocated_points:
-        #         stats_dict = dict(zip(scaling_list, combination))
-        #
-        #         # Check if the combination satisfies the minimum value condition for each stat
-        #         if all(
-        #                 combination[idx] >= getattr(self.starting_class,
-        #                                             f'getMin{stat}')()
-        #                 for idx, stat in enumerate(scaling_list)
-        #         ):
-        #             combination_counter += 1
-        #             current_dmg = self.calculate_dmg()
-        #             key = ', '.join(
-        #                 f"{stat}: {value}" for stat, value in stats_dict.items())
-        #             value_map[key] = current_dmg
-
-        #MAX WWORKS
-        # for combination in product(range(min(allocated_points + 1, max_stat_value + 1)),
-        #                            repeat=len(scaling_list)):
-        #     if sum(combination) == allocated_points and all(
-        #             value <= max_stat_value for value in combination):
-        #         stats_dict = dict(zip(scaling_list, combination))
-        #         combination_counter += 1
-        #         current_dmg = self.calculate_dmg()
-        #         key = ', '.join(
-        #             f"{stat}: {value}" for stat, value in stats_dict.items())
-        #         value_map[key] = current_dmg
 
 
-        # for combination in product(range(allocated_points + 1), repeat=len(scaling_list)):
-        #     if sum(combination) == allocated_points:
-        #         stats_dict = dict(zip(scaling_list, combination))
-        #         combination_counter += 1
-        #         current_dmg = self.calculate_dmg()
-        #         key = ', '.join(
-        #             f"{stat}: {value}" for stat, value in stats_dict.items())
-        #         value_map[key] = current_dmg
+
 
         # TODO: väärä approach, ei toimi pitää testata että requirementit täyttyy
         # if scaling_count == 1:
