@@ -2,6 +2,7 @@ import CalcModule
 import math
 from collections import OrderedDict
 
+
 class Calculator:
     def __init__(self, starting_class, weapon_extra_data, weapon_passive, weapon_attack,
              weapon_scaling, weapon_correct_id, weapon_element_correct):
@@ -25,25 +26,19 @@ class Calculator:
     #
     #     return scaling_list
 
-    def getScalingCount(self):
+    def getScalingStats(self):
 
-        scaling_count = 0
         scaling_list = []
 
         if self.weapon_scaling.getStrScaling() > 0 or self.weapon_extra_data.getRequiredStr() > 0:
-            scaling_count += 1
             scaling_list.append("Str")
         if self.weapon_scaling.getDexScaling() > 0 or self.weapon_extra_data.getRequiredDex() > 0:
-            scaling_count += 1
             scaling_list.append("Dex")
         if self.weapon_scaling.getIntScaling() > 0 or self.weapon_extra_data.getRequiredInt() > 0:
-            scaling_count += 1
             scaling_list.append("Int")
         if self.weapon_scaling.getFaiScaling() > 0 or self.weapon_extra_data.getRequiredFai() > 0:
-            scaling_count += 1
             scaling_list.append("Fai")
         if self.weapon_scaling.getArcScaling() > 0 or self.weapon_extra_data.getRequiredArc() > 0:
-            scaling_count += 1
             scaling_list.append("Arc")
 
         return scaling_list
@@ -92,10 +87,44 @@ class Calculator:
     def optimize(self):
         combination_counter = 0
         value_map = {}
-        allocated_points = 3
+        allocated_points = 150
         max_stat_value = 99
 
-        scaling_list = self.getScalingCount()
+        attribute_setters = {
+            "Str": self.starting_class.setCurrentStr,
+            "Dex": self.starting_class.setCurrentDex,
+            "Int": self.starting_class.setCurrentInt,
+            "Fai": self.starting_class.setCurrentFai,
+            "Arc": self.starting_class.setCurrentArc,
+        }
+
+        scaling_list = self.getScalingStats()
+
+        index = 0
+
+        # Use all allocates points starting from the first (str)
+        for stat in scaling_list:
+            print(f"Start of loop {stat}: {getattr(self.starting_class, f'getMin{stat}')()}")
+
+        while index < len(scaling_list):
+            if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + allocated_points > 99:
+
+                allocated_points = allocated_points - (99 - getattr(self.starting_class, f'getCurrent{scaling_list[index]}')())
+                if index + 1 < len(scaling_list):
+                    attribute_setters[scaling_list[index + 1]](allocated_points)
+                    setattr(self.starting_class, f'setCurrent{scaling_list[index]}', 99)
+
+                attribute_setters[scaling_list[index]](99)
+                print(f"Current {scaling_list[index]}: {getattr(self.starting_class, f'getCurrent{scaling_list[index]}')()}")
+            else:
+                min_stat = getattr(self.starting_class, f'getMin{scaling_list[index]}')()
+                attribute_setters[scaling_list[index]](min_stat + allocated_points)
+                #setattr(self.starting_class, f'setCurrent{scaling_list[index]}', (self.starting_class, min_stat + allocated_points))
+                print(f"Current {scaling_list[index]}: {getattr(self.starting_class, f'getCurrent{scaling_list[index]}')()}")
+
+            #print(self.calculate_dmg())
+            #combination_counter += 1
+            index += 1
 
 
 
@@ -103,7 +132,9 @@ class Calculator:
 
 
 
-        # TODO: väärä approach, ei toimi pitää testata että requirementit täyttyy
+
+
+
         # if scaling_count == 1:
         #     attribute = scaling_list[0]
         #     min_value = getattr(self.starting_class, f'getMin{attribute}')()
