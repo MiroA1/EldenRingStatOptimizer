@@ -87,7 +87,7 @@ class Calculator:
     def optimize(self):
         combination_counter = 0
         value_map = {}
-        allocated_points = 150
+        allocated_points = 60
         max_stat_value = 99
 
         attribute_setters = {
@@ -100,55 +100,139 @@ class Calculator:
 
         scaling_list = self.getScalingStats()
 
-        index = 0
+        starting_stats = {}
 
         for stat in scaling_list:
             print(f"Start of loop {stat}: {getattr(self.starting_class, f'getMin{stat}')()}")
 
-        # Use all allocates points starting from the first (str)
-        while index < len(scaling_list):
-            if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + allocated_points > 99:
-
-                allocated_points = allocated_points - (99 - getattr(self.starting_class, f'getCurrent{scaling_list[index]}')())
-                if index + 1 < len(scaling_list):
-                    attribute_setters[scaling_list[index + 1]](allocated_points)
-                    setattr(self.starting_class, f'setCurrent{scaling_list[index]}', 99)
-
-                attribute_setters[scaling_list[index]](99)
-                print(f"Current {scaling_list[index]}: {getattr(self.starting_class, f'getCurrent{scaling_list[index]}')()}")
-            else:
-                min_stat = getattr(self.starting_class, f'getMin{scaling_list[index]}')()
-                attribute_setters[scaling_list[index]](min_stat + allocated_points)
-                #setattr(self.starting_class, f'setCurrent{scaling_list[index]}', (self.starting_class, min_stat + allocated_points))
-                print(f"Current {scaling_list[index]}: {getattr(self.starting_class, f'getCurrent{scaling_list[index]}')()}")
-
-            index += 1
-            #print(self.calculate_dmg())
+        alloc_temp = allocated_points
 
         index = 0
-        while index < len(scaling_list):
+        # Use all points starting from the first (str)
+        while alloc_temp > 0 and index < len(scaling_list):
             if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() == 99:
                 index += 1
                 continue
+            elif getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + alloc_temp > 99:
+
+                attribute_setters[scaling_list[index]](99)
+                difference = 99 - getattr(self.starting_class, f'getMin{scaling_list[index]}')()
+                alloc_temp = alloc_temp - difference
+
+                if index + 1 < len(scaling_list):
+                    if getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() + alloc_temp > 99:
+                        attribute_setters[scaling_list[index + 1]](99)
+                        difference = 99 - getattr(self.starting_class, f'getMin{scaling_list[index + 1]}')()
+                        alloc_temp = alloc_temp - difference
+                    else:
+                        attribute_setters[scaling_list[index + 1]](getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() + alloc_temp)
+                        difference = getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() - getattr(self.starting_class, f'getMin{scaling_list[index + 1]}')()
+                        alloc_temp = alloc_temp - difference
             else:
-                if getattr(self.starting_class, f'getCurrent{scaling_list[len(scaling_list) - 1]}')() < 99:
-                    # if getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() == 99:
-                    #     index += 1
-                    #     continue
-                    #else:
-                    while (getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() > getattr(self.starting_class, f'getMin{scaling_list[index]}')()
-                           and getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() < 99):
-                        attribute_setters[scaling_list[index - 1]](getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() - 1)
-                        attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + 1)
-                        stat_string = ', '.join(
-                            f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-                            for stat in scaling_list)
-                        value_map[stat_string] = self.calculate_dmg()
-                        combination_counter += 1
+                attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + alloc_temp)
+                difference = getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() - getattr(self.starting_class, f'getMin{scaling_list[index]}')()
+                alloc_temp = alloc_temp - difference
+
+            index += 1
+
+        for stat in scaling_list:
+            starting_stats[stat] = getattr(self.starting_class, f'getCurrent{stat}')()
+            print(f"End of loop {stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}")
+
+        # Outer loop finds the first value not at 99
+        # index = 0
+        # while index+1 < len(scaling_list) - 1:
+        #     if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() == 99:
+        #         index += 1
+        #         continue
+        #     else:
+        #         if getattr(self.starting_class, f'getCurrent{scaling_list[len(scaling_list) - 1]}')() < 99:
+        #             # if getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() == 99:
+        #             #     index += 1
+        #             #     continue
+        #             #else:
+        #             stat_string = ', '.join(
+        #                 f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+        #                 for stat in scaling_list)
+        #             value_map[stat_string] = self.calculate_dmg()
+        #             combination_counter += 1
+        #
+        #             while (getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() > getattr(self.starting_class, f'getMin{scaling_list[index]}')()
+        #                    and getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() < 99):
+        #
+        #                 attribute_setters[scaling_list[index - 1]](getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() - 1)
+        #                 attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + 1)
+        #
+        #                 stat_string = ', '.join(
+        #                     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+        #                     for stat in scaling_list)
+        #                 value_map[stat_string] = self.calculate_dmg()
+        #                 combination_counter += 1
+
+        stat_string = ', '.join(
+            f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+            for stat in scaling_list)
+        value_map[stat_string] = self.calculate_dmg()
+        combination_counter += 1
+
+        index = 0
+        while index + 1 <= len(scaling_list) - 1:
+            if (getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() < 99
+                    and getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() >= getattr(self.starting_class, f'getMin{scaling_list[index]}')()):
+
+                attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() - 1)
+                attribute_setters[scaling_list[index + 1]](getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() + 1)
+
+                stat_string = ', '.join(
+                    f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                    for stat in scaling_list)
+                value_map[stat_string] = self.calculate_dmg()
+                combination_counter += 1
+
+            else:
                 index += 1
+                continue
 
 
-        stat_string = ', '.join(f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}" for stat in scaling_list)
+        # Reset stats to starting values
+        # for stat, value in starting_stats.items():
+        #     attribute_setters[stat](value)
+        #
+        # attribute_setters[scaling_list[0]](getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() - 1)
+        # index = 0
+        # while index < len(scaling_list) and getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() > getattr(self.starting_class, f'getMin{scaling_list[index]}')():
+        #     if getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() >= 98:
+        #         index += 1
+        #         continue
+        #     else:
+        #         if getattr(self.starting_class, f'getCurrent{scaling_list[len(scaling_list) - 1]}')() < 99:
+        #             # if getattr(self.starting_class, f'getCurrent{scaling_list[index + 1]}')() == 99:
+        #             #     index += 1
+        #             #     continue
+        #             #else:
+        #             stat_string = ', '.join(
+        #                 f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+        #                 for stat in scaling_list)
+        #             value_map[stat_string] = self.calculate_dmg()
+        #             combination_counter += 1
+        #
+        #             while (getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() > getattr(self.starting_class, f'getMin{scaling_list[index]}')()
+        #                    and getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() < 99):
+        #
+        #                 attribute_setters[scaling_list[index - 1]](getattr(self.starting_class, f'getCurrent{scaling_list[index - 1]}')() - 1)
+        #                 attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[index]}')() + 1)
+        #
+        #                 stat_string = ', '.join(
+        #                     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+        #                     for stat in scaling_list)
+        #                 value_map[stat_string] = self.calculate_dmg()
+        #                 combination_counter += 1
+
+
+
+
+
+
         #print(stat_string)
 
 

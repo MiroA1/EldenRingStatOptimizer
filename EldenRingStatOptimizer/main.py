@@ -37,6 +37,7 @@ def initData():
 
     class_name = "Hero"
     weapon_name = "Great Stars"
+    #affinity = "Heavy"
     affinity = "Sacred"
     is_2handing = False
 
