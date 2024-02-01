@@ -1,8 +1,5 @@
-from StartingClass import StartingClass
-import Calculator
+import Optimizer
 import DataReader
-
-TOTAL_SKILL_POINTS = 70
 
 # def calcBloodloss(current_arc):
 #
@@ -13,6 +10,7 @@ TOTAL_SKILL_POINTS = 70
 #     bloodloss_floored = int(bloodloss)
 #
 #     return bloodloss
+
 
 def calcPassiveArc(current_arc):
 
@@ -26,13 +24,6 @@ def calcPassiveArc(current_arc):
         return (10 * ((current_arc - 1) / 24)) / 100
 
 
-# def optimize(calculator):
-#
-#     return calculator.tryPoints()
-
-
-
-
 def initData():
 
     class_name = "Hero"
@@ -42,7 +33,7 @@ def initData():
     is_2handing = False
 
     max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
-    weapon_upgrade_level = 25
+    weapon_upgrade_level = 10
 
     if affinity != "":
         weapon = affinity + " " + weapon_name
@@ -58,7 +49,7 @@ def initData():
     weapon_correct_id = DataReader.initWeaponCorrectId(weapon)
     weapon_element_correct = DataReader.initWeaponElementCorrect(weapon_correct_id)
 
-    calculator = Calculator.Calculator(starting_class, weapon_extra_data, weapon_passive, weapon_attack,
+    optimizer = Optimizer.Optimizer(starting_class, weapon_extra_data, weapon_passive, weapon_attack,
              weapon_scaling, weapon_correct_id, weapon_element_correct)
 
 
@@ -81,21 +72,19 @@ def initData():
     print(f"str scaling: {weapon_scaling.getStrScaling()}")
     print(f"weapon id: {weapon_correct_id.getAttackElementId()}")
 
-    return calculator
+    return optimizer
 
 
 def main():
 
+    optimizer = initData()
+    value_map = optimizer.optimize()
 
-    calculator = initData()
-    value_map = calculator.optimize()
-    #value_map = optimize(calculator)
-
-
-    #value_map = tryPoints()
+    combination_counter = 0
 
     for key, value in value_map.items():
-        print(f"{key}: {value}")
+        combination_counter += 1
+        print(f"{key}  |  {value}")
 
     # TODO:  Sort by damage
     # sorted_values = dict(sorted(value_map.items(), key=lambda item: item[1]))
@@ -108,6 +97,7 @@ def main():
     #     print(f"{key}: {value}")
 
     # TODO: Find best combined, best total dmg, first high passive, stats divided by 10 (soft caps)
+    print(f"COMBINATIONS: {combination_counter}")
 
 
 if __name__ == "__main__":
