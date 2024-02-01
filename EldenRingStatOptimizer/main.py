@@ -6,8 +6,8 @@ def initData():
     class_name = "Hero"
     weapon_name = "Great Stars"
     # weapon_name = "Erdsteel Dagger"
-    affinity = "Heavy"
-    #affinity = "Blood"
+    #affinity = "Heavy"
+    affinity = "Blood"
     #affinity = "Cold"
     is_2handing = False
 
@@ -56,29 +56,35 @@ def initData():
 def main():
     optimizer = initData()
     value_map = optimizer.optimize()
+    value_list = optimizer.optimize()
 
     combination_counter = 0
+    #TODO: 2h hand and input all stats
 
-    for key, value in value_map.items():
+    # for key, value in value_map.items():
+    #     combination_counter += 1
+    #     print(f"{key}  |  {value}")
+    #print(value_list)
+
+    # TODO: Sort by damage + passives
+    sorted_list = sorted(value_list, key=lambda x: x.getTotalSum())
+    for combination in sorted_list:
+        print(f"Stats: {combination.getStats()} | Dmg: {combination.getTotalDmg()} | "
+              f"P1: {combination.getPassive1()} {combination.getPassive1Value()} | "
+              f"P2: {combination.getPassive1()}: {combination.getPassive2Value()} | "
+              f"Dmg + passives: {combination.getTotalSum()}")
         combination_counter += 1
-        print(f"{key}  |  {value}")
 
-    # TODO:  Sort by damage
-    # sorted_values = dict(sorted(value_map.items(), key=lambda item: item[1]))
-    # for key, value in sorted_values.items():
-    #     combination_counter += 1
-    #     print(f"{key}  |  {value}")
 
-    # sorted_value_map = dict(sorted(value_map.items(), key=lambda item: float(item[1].split(":")[1].split()[0]), reverse=True))
-    # for key, value in sorted_value_map.items():
+    # # TODO: Sort by damage
+    # sorted_list = sorted(value_list, key=lambda x: x.getTotalDmg())
+    # for combination in sorted_list:
+    #     print(
+    #         f"Stats: {combination.getStats()} | Dmg: {combination.getTotalDmg()} | Passive 1: {combination.getPassive1Value()} | Passive 2: {combination.getPassive2Value()}| Total Sum: {combination.getTotalSum()}")
     #     combination_counter += 1
-    #     print(f"{key}: {value}")
 
-    # TODO: Sort by damage + passive
-    # sorted_values = dict(sorted(value_map.items(), key=lambda item: (str(item[1]), item[1])))
-    # for key, value in sorted_values.items():
-    #     combination_counter += 1
-    #     print(f"{key}  |  {value}")
+
+
 
     # TODO: Find best combined, best total dmg, first high passive, stats divided by 10 (soft caps)
     print(f"COMBINATIONS: {combination_counter}")
