@@ -21,10 +21,10 @@ class WeaponPassive:
     def getPassiveType2(self):
         return self.passive_type2
 
-    def getRotMadSleep1(self):
+    def getRotMadSleepBase1(self):
         return self.rot_mad_sleep1
 
-    def getRotMadSleep2(self):
+    def getRotMadSleepBase2(self):
         return self.rot_mad_sleep2
 
     def getFrostBase1(self):

@@ -1,35 +1,14 @@
 import Optimizer
 import DataReader
 
-# def calcBloodloss(current_arc):
-#
-#     passive_arc = calcPassiveArc(current_arc)
-#
-#     bloodloss = (ARC_SCALING * (passive_arc * BLOOD_BASE)) + BLOOD_BASE
-#
-#     bloodloss_floored = int(bloodloss)
-#
-#     return bloodloss
-
-
-def calcPassiveArc(current_arc):
-
-    if current_arc > 60:
-        return (90 + 10 * ((current_arc - 60) / 39)) / 100
-    elif current_arc > 45:
-        return (75 + 15 * ((current_arc - 45) / 15)) / 100
-    elif current_arc > 25:
-        return (10 + 65 * ((current_arc - 25) / 20)) / 100
-    else:
-        return (10 * ((current_arc - 1) / 24)) / 100
-
 
 def initData():
-
     class_name = "Hero"
     weapon_name = "Great Stars"
-    #affinity = "Heavy"
-    affinity = "Blood"
+    # weapon_name = "Erdsteel Dagger"
+    affinity = "Heavy"
+    #affinity = "Blood"
+    #affinity = "Cold"
     is_2handing = False
 
     max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
@@ -40,20 +19,19 @@ def initData():
     else:
         weapon = weapon_name
 
-
     starting_class = DataReader.initStartingClass(class_name)
-    weapon_extra_data = DataReader.initWeaponExtraData(weapon, weapon_upgrade_level, is_2handing)
+    weapon_extra_data = DataReader.initWeaponExtraData(weapon, weapon_upgrade_level,
+                                                       is_2handing)
     weapon_passive = DataReader.initWeaponPassive(weapon, weapon_upgrade_level)
     weapon_attack = DataReader.initWeaponAttack(weapon, weapon_upgrade_level)
     weapon_scaling = DataReader.initWeaponScaling(weapon, weapon_upgrade_level)
     weapon_correct_id = DataReader.initWeaponCorrectId(weapon)
     weapon_element_correct = DataReader.initWeaponElementCorrect(weapon_correct_id)
 
-    optimizer = Optimizer.Optimizer(starting_class, weapon_extra_data, weapon_passive, weapon_attack,
-             weapon_scaling, weapon_correct_id, weapon_element_correct)
-
-
-
+    optimizer = Optimizer.Optimizer(starting_class, weapon_extra_data, weapon_passive,
+                                    weapon_attack,
+                                    weapon_scaling, weapon_correct_id,
+                                    weapon_element_correct)
 
     print(f"Starting class: {starting_class.getName()}")
     print(f"min Vigor: {starting_class.getMinVigor()}")
@@ -76,25 +54,31 @@ def initData():
 
 
 def main():
-
     optimizer = initData()
     value_map = optimizer.optimize()
 
     combination_counter = 0
 
-    # for key, value in value_map.items():
+    for key, value in value_map.items():
+        combination_counter += 1
+        print(f"{key}  |  {value}")
+
+    # TODO:  Sort by damage
+    # sorted_values = dict(sorted(value_map.items(), key=lambda item: item[1]))
+    # for key, value in sorted_values.items():
     #     combination_counter += 1
     #     print(f"{key}  |  {value}")
 
-    # TODO:  Sort by damage
-    sorted_values = dict(sorted(value_map.items(), key=lambda item: item[1]))
-    for key, value in sorted_values.items():
-        print(f"{key}: {value}")
+    # sorted_value_map = dict(sorted(value_map.items(), key=lambda item: float(item[1].split(":")[1].split()[0]), reverse=True))
+    # for key, value in sorted_value_map.items():
+    #     combination_counter += 1
+    #     print(f"{key}: {value}")
 
-    # TODO: Sort by damage + passives
+    # TODO: Sort by damage + passive
     # sorted_values = dict(sorted(value_map.items(), key=lambda item: (str(item[1]), item[1])))
     # for key, value in sorted_values.items():
-    #     print(f"{key}: {value}")
+    #     combination_counter += 1
+    #     print(f"{key}  |  {value}")
 
     # TODO: Find best combined, best total dmg, first high passive, stats divided by 10 (soft caps)
     print(f"COMBINATIONS: {combination_counter}")

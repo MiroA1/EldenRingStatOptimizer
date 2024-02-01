@@ -1,4 +1,5 @@
-import CalcModule
+
+import Calculator
 
 
 class Optimizer:
@@ -13,16 +14,6 @@ class Optimizer:
         self.weapon_correct_id = weapon_correct_id
         self.weapon_element_correct = weapon_element_correct
 
-    # def getScalingCount(self):
-    #     scaling_attributes = ["Str", "Dex", "Int", "Fai", "Arc"]
-    #     scaling_list = []
-    #
-    #     for attribute in scaling_attributes:
-    #         scaling_value = getattr(self.weapon_scaling, f'get{attribute}Scaling')()
-    #         if scaling_value > 0:
-    #             scaling_list.append(attribute)
-    #
-    #     return scaling_list
 
     def getScalingStats(self):
 
@@ -41,57 +32,12 @@ class Optimizer:
 
         return scaling_list
 
-    def calculate_dmg(self):
-
-        if self.starting_class.getCurrentStr() < self.weapon_extra_data.getRequiredStr():
-            str_req_met = 0
-        else:
-            str_req_met = 1
-
-        if self.starting_class.getCurrentDex() < self.weapon_extra_data.getRequiredDex():
-            dex_req_met = 0
-        else:
-            dex_req_met = 1
-
-        if self.starting_class.getCurrentInt() < self.weapon_extra_data.getRequiredInt():
-            int_req_met = 0
-        else:
-            int_req_met = 1
-
-        if self.starting_class.getCurrentFai() < self.weapon_extra_data.getRequiredFai():
-            fai_req_met = 0
-        else:
-            fai_req_met = 1
-
-        if self.starting_class.getCurrentArc() < self.weapon_extra_data.getRequiredArc():
-            arc_req_met = 0
-        else:
-            arc_req_met = 1
-
-        total_dmg = (CalcModule.calcPhysDamage(self, str_req_met, dex_req_met,
-                                               int_req_met, fai_req_met,
-                                               arc_req_met) + self.weapon_attack.getPhysAttack() +
-                     CalcModule.calcMagDamage(self, str_req_met, dex_req_met,
-                                              int_req_met, fai_req_met,
-                                              arc_req_met) + self.weapon_attack.getMagAttack() +
-                     CalcModule.calcFireDamage(self, str_req_met, dex_req_met,
-                                               int_req_met, fai_req_met,
-                                               arc_req_met) + self.weapon_attack.getFireAttack() +
-                     CalcModule.calcLighDamage(self, str_req_met, dex_req_met,
-                                               int_req_met, fai_req_met,
-                                               arc_req_met) + self.weapon_attack.getLighAttack() +
-                     CalcModule.calcHolyDamage(self, str_req_met, dex_req_met,
-                                               int_req_met, fai_req_met,
-                                               arc_req_met) + self.weapon_attack.getHolyAttack())
-
-        # print(self.starting_class.getCurrentStr())
-        return round(total_dmg, 5)
 
     def optimize(self):
 
         value_map = {}
         scaling_list = self.getScalingStats()
-        allocated_points = 60
+        allocated_points = 70
 
         attribute_setters = {
             "Str": self.starting_class.setCurrentStr,
@@ -159,7 +105,7 @@ class Optimizer:
         stat_string = ', '.join(
             f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
             for stat in scaling_list)
-        value_map[stat_string] = self.calculate_dmg()
+        value_map[stat_string] = Calculator.calculateTotalDmg(self)
 
 
 
@@ -173,7 +119,7 @@ class Optimizer:
             stat_string = ', '.join(
                 f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
                 for stat in scaling_list)
-            value_map[stat_string] = self.calculate_dmg()
+            value_map[stat_string] = Calculator.calculateTotalDmg(self)
 
 
 
@@ -190,7 +136,10 @@ class Optimizer:
                 stat_string = ', '.join(
                     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
                     for stat in scaling_list)
-                value_map[stat_string] = self.calculate_dmg()
+                value_map[stat_string] = (
+                    f"Dmg: {Calculator.calculateTotalDmg(self)}  |  "
+                    f"P1: {self.weapon_passive.getPassiveType1()}: {Calculator.calcPassive1(self)}  |  "
+                    f"P2: {self.weapon_passive.getPassiveType2()}: {Calculator.calcPassive2(self)}")
 
 
 
@@ -213,7 +162,7 @@ class Optimizer:
                 stat_string = ', '.join(
                     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
                     for stat in scaling_list)
-                value_map[stat_string] = self.calculate_dmg()
+                value_map[stat_string] = Calculator.calculateTotalDmg(self)
 
             attribute_setters[scaling_list[dec_index]](save_stats[dec_index])
             attribute_setters[scaling_list[inc_index]](save_stats[inc_index])
@@ -251,7 +200,7 @@ class Optimizer:
                 stat_string = ', '.join(
                     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
                     for stat in scaling_list)
-                value_map[stat_string] = self.calculate_dmg()
+                value_map[stat_string] = Calculator.calculateTotalDmg(self)
 
                 while getattr(self.starting_class,
                               f'getCurrent{scaling_list[dec_index]}')() > getattr(
@@ -273,11 +222,15 @@ class Optimizer:
                     stat_string = ', '.join(
                         f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
                         for stat in scaling_list)
-                    stat_string = stat_string + f" | stat_sum: {stat_sum}"
-                    value_map[stat_string] = self.calculate_dmg()
+                    #stat_string = stat_string + f" | stat_sum: {stat_sum}"
+                    value_map[stat_string] = (f"Dmg: {Calculator.calculateTotalDmg(self)}  |  "
+                                              f"P1: {self.weapon_passive.getPassiveType1()}: {Calculator.calcPassive1(self)}  |  "
+                                              f"P2: {self.weapon_passive.getPassiveType2()}: {Calculator.calcPassive2(self)}")
 
                 attribute_setters[scaling_list[dec_index]](save_stats[dec_index])
                 attribute_setters[scaling_list[inc_index]](save_stats[inc_index])
+
+
 
 
 

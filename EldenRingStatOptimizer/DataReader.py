@@ -90,30 +90,30 @@ def initWeaponPassive(weapon_name, weapon_upgrade_level):
                 passive_type2 = row["Type 2"]
 
                 if passive_type1 == "Scarlet Rot":
-                    rot_mad_sleep1 = row["Scarlet Rot +0"]
+                    rot_mad_sleep1 = float(row["Scarlet Rot +0"])
                 elif passive_type1 == "Madness":
-                    rot_mad_sleep1 = row["Madness +0"]
+                    rot_mad_sleep1 = float(row["Madness +0"])
                 elif passive_type1 == "Sleep":
-                    rot_mad_sleep1 = row["Sleep +0"]
+                    rot_mad_sleep1 = float(row["Sleep +0"])
                 elif passive_type1 == "Frost":
-                    frost_base1 = row[f"Frost +{weapon_upgrade_level}"]
+                    frost_base1 = float(row[f"Frost +{weapon_upgrade_level}"])
                 elif passive_type1 == "Poison":
-                    poison_base1 = row[f"Poison +{weapon_upgrade_level}"]
+                    poison_base1 = float(row[f"Poison +{weapon_upgrade_level}"])
                 elif passive_type1 == "Blood":
-                    blood_base1 = row[f"Blood +{weapon_upgrade_level}"]
+                    blood_base1 = float(row[f"Blood +{weapon_upgrade_level}"])
 
                 if passive_type2 == "Scarlet Rot":
-                    rot_mad_sleep2 = row["Scarlet Rot +0"]
+                    rot_mad_sleep2 = float(row["Scarlet Rot +0"])
                 elif passive_type2 == "Madness":
-                    rot_mad_sleep2 = row["Madness +0"]
+                    rot_mad_sleep2 = float(row["Madness +0"])
                 elif passive_type2 == "Sleep":
-                    rot_mad_sleep2 = row["Sleep +0"]
+                    rot_mad_sleep2 = float(row["Sleep +0"])
                 elif passive_type2 == "Frost":
-                    frost_base2 = row[f"Frost +{weapon_upgrade_level}"]
+                    frost_base2 = float(row[f"Frost +{weapon_upgrade_level}"])
                 elif passive_type2 == "Poison":
-                    poison_base2 = row[f"Poison +{weapon_upgrade_level}"]
+                    poison_base2 = float(row[f"Poison +{weapon_upgrade_level}"])
                 elif passive_type2 == "Blood":
-                    blood_base2 = row[f"Blood +{weapon_upgrade_level}"]
+                    blood_base2 = float(row[f"Blood +{weapon_upgrade_level}"])
 
 
 
