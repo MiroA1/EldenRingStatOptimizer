@@ -29,11 +29,11 @@ def initData():
     class_name = "Hero"
     weapon_name = "Great Stars"
     #affinity = "Heavy"
-    affinity = "Sacred"
+    affinity = "Blood"
     is_2handing = False
 
     max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
-    weapon_upgrade_level = 10
+    weapon_upgrade_level = 25
 
     if affinity != "":
         weapon = affinity + " " + weapon_name
@@ -82,14 +82,14 @@ def main():
 
     combination_counter = 0
 
-    for key, value in value_map.items():
-        combination_counter += 1
-        print(f"{key}  |  {value}")
+    # for key, value in value_map.items():
+    #     combination_counter += 1
+    #     print(f"{key}  |  {value}")
 
     # TODO:  Sort by damage
-    # sorted_values = dict(sorted(value_map.items(), key=lambda item: item[1]))
-    # for key, value in sorted_values.items():
-    #     print(f"{key}: {value}")
+    sorted_values = dict(sorted(value_map.items(), key=lambda item: item[1]))
+    for key, value in sorted_values.items():
+        print(f"{key}: {value}")
 
     # TODO: Sort by damage + passives
     # sorted_values = dict(sorted(value_map.items(), key=lambda item: (str(item[1]), item[1])))

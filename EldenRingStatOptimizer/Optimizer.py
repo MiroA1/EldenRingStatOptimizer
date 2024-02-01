@@ -88,9 +88,10 @@ class Optimizer:
         return round(total_dmg, 5)
 
     def optimize(self):
+
         value_map = {}
-        allocated_points = 263
         scaling_list = self.getScalingStats()
+        allocated_points = 60
 
         attribute_setters = {
             "Str": self.starting_class.setCurrentStr,
@@ -151,10 +152,16 @@ class Optimizer:
 
         print(f"Excess points: {alloc_temp}")
 
+
+
+
+
         stat_string = ', '.join(
             f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
             for stat in scaling_list)
         value_map[stat_string] = self.calculate_dmg()
+
+
 
         if len(scaling_list) == 1:
             if getattr(self.starting_class,
@@ -167,6 +174,8 @@ class Optimizer:
                 f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
                 for stat in scaling_list)
             value_map[stat_string] = self.calculate_dmg()
+
+
 
         elif len(scaling_list) == 2:
             while (getattr(self.starting_class,
@@ -183,6 +192,8 @@ class Optimizer:
                     for stat in scaling_list)
                 value_map[stat_string] = self.calculate_dmg()
 
+
+
         elif len(scaling_list) == 3:
 
             save_stats = []
@@ -193,6 +204,20 @@ class Optimizer:
             start_index = 0
             dec_index = 1
             inc_index = 2
+
+            while (getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')() > getattr(self.starting_class, f'getMin{scaling_list[dec_index]}')()
+                   and getattr(self.starting_class, f'getCurrent{scaling_list[inc_index]}')() < 99):
+
+                attribute_setters[scaling_list[dec_index]](getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')() - 1)
+                attribute_setters[scaling_list[inc_index]](getattr(self.starting_class, f'getCurrent{scaling_list[inc_index]}')() + 1)
+                stat_string = ', '.join(
+                    f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                    for stat in scaling_list)
+                value_map[stat_string] = self.calculate_dmg()
+
+            attribute_setters[scaling_list[dec_index]](save_stats[dec_index])
+            attribute_setters[scaling_list[inc_index]](save_stats[inc_index])
+
 
             while getattr(self.starting_class,
                           f'getCurrent{scaling_list[start_index]}')() > getattr(
@@ -253,5 +278,7 @@ class Optimizer:
 
                 attribute_setters[scaling_list[dec_index]](save_stats[dec_index])
                 attribute_setters[scaling_list[inc_index]](save_stats[inc_index])
+
+
 
         return value_map
