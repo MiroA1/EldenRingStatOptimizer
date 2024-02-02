@@ -11,7 +11,7 @@ def initData():
     #affinity = "Heavy"
     affinity = "Blood"
     #affinity = "Cold"
-    is_2handing = False
+    is_2handing = True
 
     max_upgrade_level = DataReader.getWeaponMaxUpgradeLevel(weapon_name)
     weapon_upgrade_level = max_upgrade_level
@@ -48,7 +48,7 @@ def main():
     value_map = optimizer.optimize()
     value_list = optimizer.optimize()
 
-    #TODO: 2h hand and input all stats (custom min values)
+    #TODO: input all stats (custom min values), weapon name + affinity not working
 
     # for key, value in value_map.items():
     #     print(f"{key}  |  {value}")
@@ -65,13 +65,13 @@ def main():
 
 
     # TODO: Sort by damage
-    # sorted_list = sorted(value_list, key=lambda x: x.getTotalDmg())
-    # sorted_list = sorted_list[-20:]
-    # for combination in sorted_list:
-    #     print(f"Stats: {combination.getStats()} | Dmg: {combination.getTotalDmg()} | "
-    #           f"P1: {combination.getPassive1()}: {combination.getPassive1Value()} | "
-    #           f"P2: {combination.getPassive2()}: {combination.getPassive2Value()} | "
-    #           f"Dmg + passives: {combination.getTotalSum()}")
+    sorted_list = sorted(value_list, key=lambda x: x.getTotalDmg())
+    sorted_list = sorted_list[-20:]
+    for combination in sorted_list:
+        print(f"Stats: {combination.getStats()} | Dmg: {combination.getTotalDmg()} | "
+              f"P1: {combination.getPassive1()}: {combination.getPassive1Value()} | "
+              f"P2: {combination.getPassive2()}: {combination.getPassive2Value()} | "
+              f"Dmg + passives: {combination.getTotalSum()}")
 
 
     # TODO: Sort by passives

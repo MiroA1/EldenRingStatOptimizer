@@ -181,39 +181,43 @@ def calcPhysStrDamage(optimizer):
     if optimizer.weapon_attack.getPhysAttack() > 0:
         phys_calc_id = optimizer.weapon_correct_id.getPhysCalcId()
         phys_str_calc_correct = 0
+        
+        current_str = optimizer.starting_class.getCurrentStr()
+        if optimizer.weapon_extra_data.getIs2Handing() == True:
+            current_str = current_str * 1.5
 
         if optimizer.weapon_element_correct.getPhysScalesOnStr() == 0:
             phys_str_calc_correct = 0
         elif phys_calc_id == 0:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_0(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 1:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_1(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 2:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_2(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 4:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_4(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 7:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_7(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 8:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_8(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 12:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_12(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 14:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_14(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 15:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_15(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif phys_calc_id == 16:
             phys_str_calc_correct = SwitchFunctions.calcCorrectStat_16(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
 
         return optimizer.weapon_attack.getPhysAttack() * optimizer.weapon_scaling.getStrScaling() * (
                 phys_str_calc_correct / 100)
@@ -444,38 +448,42 @@ def calcMagStrDamage(optimizer):
         mag_calc_id = optimizer.weapon_correct_id.getMagCalcId()
         mag_str_calc_correct = 0
 
+        current_str = optimizer.starting_class.getCurrentStr()
+        if optimizer.weapon_extra_data.getIs2Handing() == True:
+            current_str = current_str * 1.5
+
         if optimizer.weapon_element_correct.getMagScalesOnStr() == 0:
             mag_str_calc_correct = 0
         elif mag_calc_id == 0:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_0(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 1:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_1(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 2:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_2(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 4:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_4(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 7:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_7(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 8:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_8(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 12:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_12(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 14:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_14(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 15:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_15(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif mag_calc_id == 16:
             mag_str_calc_correct = SwitchFunctions.calcCorrectStat_16(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
 
         return optimizer.weapon_attack.getMagAttack() * optimizer.weapon_scaling.getStrScaling() * (
                 mag_str_calc_correct / 100)
@@ -707,38 +715,42 @@ def calcFireStrDamage(optimizer):
         fire_calc_id = optimizer.weapon_correct_id.getFireCalcId()
         fire_str_calc_correct = 0
 
+        current_str = optimizer.starting_class.getCurrentStr()
+        if optimizer.weapon_extra_data.getIs2Handing() == True:
+            current_str = current_str * 1.5
+
         if optimizer.weapon_element_correct.getFireScalesOnStr() == 0:
             fire_str_calc_correct = 0
         elif fire_calc_id == 0:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_0(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 1:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_1(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 2:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_2(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 4:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_4(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 7:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_7(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 8:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_8(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 12:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_12(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 14:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_14(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 15:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_15(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif fire_calc_id == 16:
             fire_str_calc_correct = SwitchFunctions.calcCorrectStat_16(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
 
         return optimizer.weapon_attack.getFireAttack() * optimizer.weapon_scaling.getStrScaling() * (
                 fire_str_calc_correct / 100)
@@ -969,38 +981,42 @@ def calcLighStrDamage(optimizer):
         ligh_calc_id = optimizer.weapon_correct_id.getLighCalcId()
         ligh_str_calc_correct = 0
 
+        current_str = optimizer.starting_class.getCurrentStr()
+        if optimizer.weapon_extra_data.getIs2Handing() == True:
+            current_str = current_str * 1.5
+
         if optimizer.weapon_element_correct.getLighScalesOnStr() == 0:
             ligh_str_calc_correct = 0
         elif ligh_calc_id == 0:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_0(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 1:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_1(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 2:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_2(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 4:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_4(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 7:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_7(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 8:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_8(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 12:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_12(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 14:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_14(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 15:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_15(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif ligh_calc_id == 16:
             ligh_str_calc_correct = SwitchFunctions.calcCorrectStat_16(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
 
         return optimizer.weapon_attack.getLighAttack() * optimizer.weapon_scaling.getStrScaling() * (
                 ligh_str_calc_correct / 100)
@@ -1231,38 +1247,42 @@ def calcHolyStrDamage(optimizer):
         holy_calc_id = optimizer.weapon_correct_id.getHolyCalcId()
         holy_str_calc_correct = 0
 
+        current_str = optimizer.starting_class.getCurrentStr()
+        if optimizer.weapon_extra_data.getIs2Handing() == True:
+            current_str = current_str * 1.5
+
         if optimizer.weapon_element_correct.getHolyScalesOnStr() == 0:
             holy_str_calc_correct = 0
         elif holy_calc_id == 0:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_0(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 1:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_1(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 2:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_2(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 4:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_4(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 7:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_7(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 8:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_8(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 12:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_12(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 14:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_14(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 15:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_15(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
         elif holy_calc_id == 16:
             holy_str_calc_correct = SwitchFunctions.calcCorrectStat_16(
-                optimizer.starting_class.getCurrentStr())
+                current_str)
 
         return optimizer.weapon_attack.getHolyAttack() * optimizer.weapon_scaling.getStrScaling() * (
                 holy_str_calc_correct / 100)

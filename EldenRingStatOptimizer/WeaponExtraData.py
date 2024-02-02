@@ -42,7 +42,7 @@ class Weapon:
     def getWeaponType(self):
         return self.weapon_type
 
-    def getIs2handing(self):
+    def getIs2Handing(self):
         return self.is_2handing
 
 
