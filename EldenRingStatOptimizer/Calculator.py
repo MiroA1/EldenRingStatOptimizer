@@ -28,7 +28,10 @@ def calcPassive2(optimizer):
         return 0
 
     if optimizer.weapon_scaling.getArcScaling() == 0:
-        return round(getattr(optimizer.weapon_passive, f'get{passive_type}Base2')(), 5)
+        if passive_type in ["Scarlet Rot", "Madness", "Sleep"]:
+            return passive_rotmadsleep_value
+        else:
+            return round(getattr(optimizer.weapon_passive, f'get{passive_type}Base2')(), 5)
 
     if arc_req_met == 0:
         if passive_type in ["Scarlet Rot", "Madness", "Sleep"]:
@@ -79,7 +82,10 @@ def calcPassive1(optimizer):
         return 0
 
     if optimizer.weapon_scaling.getArcScaling() == 0:
-        return round(getattr(optimizer.weapon_passive, f'get{passive_type}Base1')(), 5)
+        if passive_type in ["Scarlet Rot", "Madness", "Sleep"]:
+            return passive_rotmadsleep_value
+        else:
+            return round(getattr(optimizer.weapon_passive, f'get{passive_type}Base1')(), 5)
 
     if optimizer.weapon_extra_data.getName() in ["Poison Fingerprint Stone Shield", "Blood Fingerprint Stone Shield"]:
         if optimizer.weapon_scaling.getArcScaling() > 0:

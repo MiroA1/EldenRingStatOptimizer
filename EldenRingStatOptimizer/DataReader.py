@@ -41,7 +41,7 @@ def getWeaponMaxUpgradeLevel(weapon_name):
         reader = csv.DictReader(csv_file)
         for row in reader:
             if row['Name'] == weapon_name:
-                max_upgrade_level = row["Max Upgrade"]
+                max_upgrade_level = int(row["Max Upgrade"])
                 break
 
     return max_upgrade_level

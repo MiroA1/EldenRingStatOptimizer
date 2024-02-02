@@ -1,6 +1,7 @@
 import Calculator
 import Combination
 
+
 class Optimizer:
     def __init__(self, starting_class, weapon_extra_data, weapon_passive, weapon_attack,
                  weapon_scaling, weapon_correct_id, weapon_element_correct):
@@ -32,9 +33,66 @@ class Optimizer:
         return scaling_list
 
 
+    def getStatString(self, scaling_list):
+
+        return ', '.join(f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                         for stat in scaling_list)
+
+    def createNewComb1(self, scaling_list):
+
+        stat_string = self.getStatString(scaling_list)
+        stat_sum = getattr(self.starting_class, f'getCurrent{scaling_list[0]}')()
+
+        combination = Combination.Combination(stat_string,
+                                              stat_sum,
+                                              Calculator.calculateTotalDmg(self),
+                                              self.weapon_passive.getPassiveType1(),
+                                              self.weapon_passive.getPassiveType2(),
+                                              Calculator.calcPassive1(self),
+                                              Calculator.calcPassive2(self))
+
+        return combination
+
+    def createNewComb2(self, scaling_list, dec_index, inc_index):
+
+
+        stat_string = self.getStatString(scaling_list)
+
+        stat_sum = (getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')()
+                    + getattr(self.starting_class,f'getCurrent{scaling_list[inc_index]}')())
+
+        combination = Combination.Combination(stat_string,
+                                              stat_sum,
+                                              Calculator.calculateTotalDmg(self),
+                                              self.weapon_passive.getPassiveType1(),
+                                              self.weapon_passive.getPassiveType2(),
+                                              Calculator.calcPassive1(self),
+                                              Calculator.calcPassive2(self))
+
+        return combination
+
+    def createNewComb3(self, scaling_list, dec_index, inc_index, start_index):
+
+
+        stat_string = self.getStatString(scaling_list)
+
+        stat_sum = (getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')()
+                    + getattr(self.starting_class,f'getCurrent{scaling_list[inc_index]}')()
+                    + getattr(self.starting_class, f'getCurrent{scaling_list[start_index]}')())
+
+        combination = Combination.Combination(stat_string,
+                                              stat_sum,
+                                              Calculator.calculateTotalDmg(self),
+                                              self.weapon_passive.getPassiveType1(),
+                                              self.weapon_passive.getPassiveType2(),
+                                              Calculator.calcPassive1(self),
+                                              Calculator.calcPassive2(self))
+
+        return combination
+
+
     def optimize(self):
 
-        value_map = {}
         value_list = []
         scaling_list = self.getScalingStats()
         allocated_points = 70
@@ -47,9 +105,8 @@ class Optimizer:
             "Arc": self.starting_class.setCurrentArc,
         }
 
-        for stat in scaling_list:
-            print(
-                f"Start of loop {stat}: {getattr(self.starting_class, f'getMin{stat}')()}")
+        # for stat in scaling_list:
+        #     print(f"Start of loop {stat}: {getattr(self.starting_class, f'getMin{stat}')()}")
 
         # Use all points starting from the first (str)
         alloc_temp = allocated_points
@@ -92,61 +149,59 @@ class Optimizer:
 
             index += 1
 
-        for stat in scaling_list:
-            print(
-                f"End of loop {stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}")
 
-        print(f"Excess points: {alloc_temp}")
-
-
-
+        # for stat in scaling_list:
+        #     print(
+        #         f"End of loop {stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}")
+        #
+        # print(f"Excess points: {alloc_temp}")
 
 
-        stat_string = ', '.join(
-            f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-            for stat in scaling_list)
-        value_map[stat_string] = Calculator.calculateTotalDmg(self)
-        combination = Combination.Combination(stat_string,
-                                              Calculator.calculateTotalDmg(self),
-                                              self.weapon_passive.getPassiveType1(),
-                                              self.weapon_passive.getPassiveType1(),
-                                              Calculator.calcPassive1(self),
-                                              Calculator.calcPassive2(self))
-        value_list.append(combination)
+
+
+
+        # stat_string = ', '.join(
+        #     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+        #     for stat in scaling_list)
+        # value_map[stat_string] = Calculator.calculateTotalDmg(self)
+        # combination = Combination.Combination(stat_string,
+        #                                       Calculator.calculateTotalDmg(self),
+        #                                       self.weapon_passive.getPassiveType1(),
+        #                                       self.weapon_passive.getPassiveType2(),
+        #                                       Calculator.calcPassive1(self),
+        #                                       Calculator.calcPassive2(self))
+        #value_list.append(combination)
+        #value_list.append(self.createNewComb(scaling_list, dec_index, inc_index, start_index))
 
 
 
         if len(scaling_list) == 1:
-            if getattr(self.starting_class,
-                       f'getCurrent{scaling_list[0]}')() + allocated_points > 99:
+            if getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() + allocated_points > 99:
                 attribute_setters[scaling_list[index]](99)
             else:
-                attribute_setters[scaling_list[index]](getattr(self.starting_class,
-                                                               f'getCurrent{scaling_list[0]}')() + allocated_points)
-            stat_string = ', '.join(
-                f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-                for stat in scaling_list)
-            value_map[stat_string] = Calculator.calculateTotalDmg(self)
+                attribute_setters[scaling_list[index]](getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() + allocated_points)
+            # stat_string = ', '.join(
+            #     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+            #     for stat in scaling_list)
+            # value_map[stat_string] = Calculator.calculateTotalDmg(self)
+            value_list.append(self.createNewComb1(scaling_list))
 
 
 
         elif len(scaling_list) == 2:
-            while (getattr(self.starting_class,
-                           f'getCurrent{scaling_list[0]}')() > getattr(
-                    self.starting_class, f'getMin{scaling_list[0]}')()
-                   and getattr(self.starting_class,
-                               f'getCurrent{scaling_list[1]}')() < 99):
-                attribute_setters[scaling_list[0]](
-                    getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() - 1)
-                attribute_setters[scaling_list[1]](
-                    getattr(self.starting_class, f'getCurrent{scaling_list[1]}')() + 1)
-                stat_string = ', '.join(
-                    f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-                    for stat in scaling_list)
-                value_map[stat_string] = (
-                    f"Dmg: {Calculator.calculateTotalDmg(self)}  |  "
-                    f"P1: {self.weapon_passive.getPassiveType1()}: {Calculator.calcPassive1(self)}  |  "
-                    f"P2: {self.weapon_passive.getPassiveType2()}: {Calculator.calcPassive2(self)}")
+            while (getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() > getattr(self.starting_class, f'getMin{scaling_list[0]}')()
+                   and getattr(self.starting_class,f'getCurrent{scaling_list[1]}')() < 99):
+
+                attribute_setters[scaling_list[0]](getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() - 1)
+                attribute_setters[scaling_list[1]](getattr(self.starting_class, f'getCurrent{scaling_list[1]}')() + 1)
+                # stat_string = ', '.join(
+                #     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                #     for stat in scaling_list)
+                # value_map[stat_string] = (
+                #     f"Dmg: {Calculator.calculateTotalDmg(self)}  |  "
+                #     f"P1: {self.weapon_passive.getPassiveType1()}: {Calculator.calcPassive1(self)}  |  "
+                #     f"P2: {self.weapon_passive.getPassiveType2()}: {Calculator.calcPassive2(self)}")
+                value_list.append(self.createNewComb2(scaling_list, 0, 1))
 
 
 
@@ -161,23 +216,28 @@ class Optimizer:
             dec_index = 1
             inc_index = 2
 
+            # Initial combination
+            value_list.append(self.createNewComb3(scaling_list, dec_index, inc_index, start_index))
+
             while (getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')() > getattr(self.starting_class, f'getMin{scaling_list[dec_index]}')()
                    and getattr(self.starting_class, f'getCurrent{scaling_list[inc_index]}')() < 99):
 
                 attribute_setters[scaling_list[dec_index]](getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')() - 1)
                 attribute_setters[scaling_list[inc_index]](getattr(self.starting_class, f'getCurrent{scaling_list[inc_index]}')() + 1)
-                stat_string = ', '.join(
-                    f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-                    for stat in scaling_list)
-                value_map[stat_string] = Calculator.calculateTotalDmg(self)
-                combination = Combination.Combination(stat_string,
-                                                      Calculator.calculateTotalDmg(
-                                                          self),
-                                                      self.weapon_passive.getPassiveType1(),
-                                                      self.weapon_passive.getPassiveType1(),
-                                                      Calculator.calcPassive1(self),
-                                                      Calculator.calcPassive2(self))
-                value_list.append(combination)
+                # stat_string = ', '.join(
+                #     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                #     for stat in scaling_list)
+
+                # value_map[stat_string] = Calculator.calculateTotalDmg(self)
+                # combination = Combination.Combination(stat_string,
+                #                                       Calculator.calculateTotalDmg(
+                #                                           self),
+                #                                       self.weapon_passive.getPassiveType1(),
+                #                                       self.weapon_passive.getPassiveType2(),
+                #                                       Calculator.calcPassive1(self),
+                #                                       Calculator.calcPassive2(self))
+                # value_list.append(combination)
+                value_list.append(self.createNewComb3(scaling_list, dec_index, inc_index, start_index))
 
             attribute_setters[scaling_list[dec_index]](save_stats[dec_index])
             attribute_setters[scaling_list[inc_index]](save_stats[inc_index])
@@ -212,18 +272,19 @@ class Optimizer:
                 if all_99:
                     break
 
-                stat_string = ', '.join(
-                    f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-                    for stat in scaling_list)
-                value_map[stat_string] = Calculator.calculateTotalDmg(self)
-                combination = Combination.Combination(stat_string,
-                                                      Calculator.calculateTotalDmg(
-                                                          self),
-                                                      self.weapon_passive.getPassiveType1(),
-                                                      self.weapon_passive.getPassiveType1(),
-                                                      Calculator.calcPassive1(self),
-                                                      Calculator.calcPassive2(self))
-                value_list.append(combination)
+                # stat_string = ', '.join(
+                #     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                #     for stat in scaling_list)
+                # value_map[stat_string] = Calculator.calculateTotalDmg(self)
+                # combination = Combination.Combination(stat_string,
+                #                                       Calculator.calculateTotalDmg(
+                #                                           self),
+                #                                       self.weapon_passive.getPassiveType1(),
+                #                                       self.weapon_passive.getPassiveType2(),
+                #                                       Calculator.calcPassive1(self),
+                #                                       Calculator.calcPassive2(self))
+                #value_list.append(combination)
+                value_list.append(self.createNewComb3(scaling_list, dec_index, inc_index, start_index))
 
                 while getattr(self.starting_class,
                               f'getCurrent{scaling_list[dec_index]}')() > getattr(
@@ -237,23 +298,25 @@ class Optimizer:
                     attribute_setters[scaling_list[inc_index]](
                         getattr(self.starting_class,
                                 f'getCurrent{scaling_list[inc_index]}')() + 1)
-                    stat_sum = getattr(self.starting_class,
-                                       f'getCurrent{scaling_list[dec_index]}')() + getattr(
-                        self.starting_class,
-                        f'getCurrent{scaling_list[inc_index]}')() + getattr(
-                        self.starting_class, f'getCurrent{scaling_list[start_index]}')()
-                    stat_string = ', '.join(
-                        f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
-                        for stat in scaling_list)
-                    stat_string = stat_string + f" | stat_sum: {stat_sum}"
+                    # stat_sum = getattr(self.starting_class,
+                    #                    f'getCurrent{scaling_list[dec_index]}')() + getattr(
+                    #     self.starting_class,
+                    #     f'getCurrent{scaling_list[inc_index]}')() + getattr(
+                    #     self.starting_class, f'getCurrent{scaling_list[start_index]}')()
+                    # stat_string = ', '.join(
+                    #     f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                    #     for stat in scaling_list)
+                    #stat_string = stat_string + f" | stat_sum: {stat_sum}"
                     # value_map[stat_string] = (f"Dmg: {Calculator.calculateTotalDmg(self)}  |  "
                     #                           f"P1: {self.weapon_passive.getPassiveType1()}: {Calculator.calcPassive1(self)}  |  "
                     #                           f"P2: {self.weapon_passive.getPassiveType2()}: {Calculator.calcPassive2(self)}  |  "
                     #                           f"All sum: {Calculator.calculateTotalDmg(self) + Calculator.calcPassive1(self) + Calculator.calcPassive2(self)}")
-                    combination = Combination.Combination(stat_string, Calculator.calculateTotalDmg(self), self.weapon_passive.getPassiveType1(),
-                                                          self.weapon_passive.getPassiveType1(), Calculator.calcPassive1(self), Calculator.calcPassive2(self))
-                    value_list.append(combination)
+                    # combination = Combination.Combination(stat_string, stat_sum, Calculator.calculateTotalDmg(self), self.weapon_passive.getPassiveType1(),
+                    #                                       self.weapon_passive.getPassiveType2(), Calculator.calcPassive1(self), Calculator.calcPassive2(self))
 
+                    value_list.append(self.createNewComb3(scaling_list, dec_index, inc_index, start_index))
+
+                # Reset values
                 attribute_setters[scaling_list[dec_index]](save_stats[dec_index])
                 attribute_setters[scaling_list[inc_index]](save_stats[inc_index])
 
