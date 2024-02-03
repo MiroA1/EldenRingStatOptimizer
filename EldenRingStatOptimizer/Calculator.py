@@ -37,11 +37,11 @@ def calcPassive2(optimizer):
         if passive_type in ["Scarlet Rot", "Madness", "Sleep"]:
             passive2_value = passive_rotmadsleep_value * 0.6
         elif passive_type == "Frost":
-            passive2_value = optimizer.weapon_passive.getFrostBase1() * 0.6
+            passive2_value = optimizer.weapon_passive.getFrostBase2() * 0.6
         elif passive_type == "Poison":
-            passive2_value = optimizer.weapon_passive.getPoisonBase1() * 0.6
+            passive2_value = optimizer.weapon_passive.getPoisonBase2() * 0.6
         elif passive_type == "Blood":
-            passive2_value = optimizer.weapon_passive.getBloodBase1() * 0.6
+            passive2_value = optimizer.weapon_passive.getBloodBase2() * 0.6
         else:
             return 0
 
@@ -52,14 +52,14 @@ def calcPassive2(optimizer):
             passive2_value = optimizer.weapon_passive.getFrostBase1()
         elif passive_type == "Poison":
             if optimizer.weapon_scaling.getArcScaling() > 0:
-                passive2_value = optimizer.weapon_scaling.getArcScaling() * calcPassiveArc(optimizer) * optimizer.weapon_passive.getPoisonBase1() + optimizer.weapon_passive.getPoisonBase1()
+                passive2_value = optimizer.weapon_scaling.getArcScaling() * calcPassiveArc(optimizer) * optimizer.weapon_passive.getPoisonBase2() + optimizer.weapon_passive.getPoisonBase2()
             else:
-                passive2_value = optimizer.weapon_passive.getPoisonBase1()
+                passive2_value = optimizer.weapon_passive.getPoisonBase2()
         elif passive_type == "Blood":
             if optimizer.weapon_scaling.getArcScaling() > 0:
-                passive2_value = optimizer.weapon_scaling.getArcScaling() * calcPassiveArc(optimizer) * optimizer.weapon_passive.getBloodBase1() + optimizer.weapon_passive.getBloodBase1()
+                passive2_value = optimizer.weapon_scaling.getArcScaling() * calcPassiveArc(optimizer) * optimizer.weapon_passive.getBloodBase2() + optimizer.weapon_passive.getBloodBase2()
             else:
-                passive2_value = optimizer.weapon_passive.getBloodBase1()
+                passive2_value = optimizer.weapon_passive.getBloodBase2()
         else:
             return 0
 

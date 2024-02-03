@@ -47,6 +47,19 @@ def getWeaponMaxUpgradeLevel(weapon_name):
     return max_upgrade_level
 
 
+def getFullWeaponName(weapon_name, affinity):
+
+    with open("Data/ExtraData.csv", 'r') as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            if row['Weapon Name'] == weapon_name and row ['Affinity (Dropdown)'] == affinity:
+               weapon_full_name = row["Name"]
+
+
+    return weapon_full_name
+
+
+
 def initWeaponExtraData(weapon_name, weapon_upgrade_level, is_2handing):
 
     with open("Data/ExtraData.csv", 'r') as csv_file:

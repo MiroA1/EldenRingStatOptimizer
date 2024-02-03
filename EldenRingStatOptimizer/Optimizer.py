@@ -176,6 +176,7 @@ class Optimizer:
 
 
         if len(scaling_list) == 1:
+            value_list.append(self.createNewComb1(scaling_list))
             if getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() + allocated_points > 99:
                 attribute_setters[scaling_list[index]](99)
             else:
@@ -189,6 +190,7 @@ class Optimizer:
 
 
         elif len(scaling_list) == 2:
+            value_list.append(self.createNewComb1(scaling_list))
             while (getattr(self.starting_class, f'getCurrent{scaling_list[0]}')() > getattr(self.starting_class, f'getMin{scaling_list[0]}')()
                    and getattr(self.starting_class,f'getCurrent{scaling_list[1]}')() < 99):
 

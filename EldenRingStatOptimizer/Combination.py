@@ -1,13 +1,13 @@
 
 class Combination:
 
-    def __init__(self, stats, stat_sum, total_dmg, passive1, passive2, passive1_value, passive2_value):
+    def __init__(self, stats, stat_sum, total_dmg, passive1_type, passive2_type, passive1_value, passive2_value):
 
         self.stats = stats
         self.stat_sum = stat_sum
         self.total_dmg = total_dmg
-        self.passive1 = passive1
-        self.passive2 = passive2
+        self.passive1_type = passive1_type
+        self.passive2_type = passive2_type
         self.passive1_value = passive1_value
         self.passive2_value = passive2_value
         self.total_sum = total_dmg + passive1_value + passive2_value
@@ -21,11 +21,11 @@ class Combination:
     def getTotalDmg (self):
         return self.total_dmg
 
-    def getPassive1 (self):
-        return self.passive1
+    def getPassive1Type (self):
+        return self.passive1_type
 
-    def getPassive2 (self):
-        return self.passive2
+    def getPassive2Type (self):
+        return self.passive2_type
 
     def getPassive1Value (self):
         return self.passive1_value
