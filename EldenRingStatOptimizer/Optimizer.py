@@ -4,7 +4,8 @@ import Combination
 
 class Optimizer:
     def __init__(self, starting_class, weapon_extra_data, weapon_passive, weapon_attack,
-                 weapon_scaling, weapon_correct_id, weapon_element_correct):
+                 weapon_scaling, weapon_correct_id, weapon_element_correct,
+                 use_custom_min_stats, custom_min_stats, current_stats):
 
         self.starting_class = starting_class
         self.weapon_extra_data = weapon_extra_data
@@ -13,6 +14,27 @@ class Optimizer:
         self.weapon_scaling = weapon_scaling
         self.weapon_correct_id = weapon_correct_id
         self.weapon_element_correct = weapon_element_correct
+        self.use_custom_min_stats = use_custom_min_stats
+        self.custom_min_stats = custom_min_stats
+        self.current_stats = current_stats
+
+
+    def getRestStats(self):
+
+        rest_stats = []
+
+        if self.weapon_scaling.getStrScaling() == 0:
+            rest_stats.append("Str")
+        if self.weapon_scaling.getDexScaling() == 0:
+            rest_stats.append("Dex")
+        if self.weapon_scaling.getIntScaling() == 0:
+            rest_stats.append("Int")
+        if self.weapon_scaling.getFaiScaling() == 0:
+            rest_stats.append("Fai")
+        if self.weapon_scaling.getArcScaling() == 0:
+            rest_stats.append("Arc")
+
+        return rest_stats
 
 
     def getScalingStats(self):
@@ -42,9 +64,12 @@ class Optimizer:
 
         stat_string = self.getStatString(scaling_list)
         stat_sum = getattr(self.starting_class, f'getCurrent{scaling_list[0]}')()
+        rest_stats = self.getRestStats()
+        rest_stat_string = ', '.join(f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+                         for stat in rest_stats)
 
         combination = Combination.Combination(stat_string,
-                                              stat_sum,
+                                              stat_sum, rest_stat_string,
                                               Calculator.calculateTotalDmg(self),
                                               self.weapon_passive.getPassiveType1(),
                                               self.weapon_passive.getPassiveType2(),
@@ -61,14 +86,18 @@ class Optimizer:
         stat_sum = (getattr(self.starting_class, f'getCurrent{scaling_list[dec_index]}')()
                     + getattr(self.starting_class,f'getCurrent{scaling_list[inc_index]}')())
 
+        rest_stats = self.getRestStats()
+        rest_stat_string = ', '.join(
+            f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+            for stat in rest_stats)
+
         combination = Combination.Combination(stat_string,
-                                              stat_sum,
+                                              stat_sum, rest_stat_string,
                                               Calculator.calculateTotalDmg(self),
                                               self.weapon_passive.getPassiveType1(),
                                               self.weapon_passive.getPassiveType2(),
                                               Calculator.calcPassive1(self),
                                               Calculator.calcPassive2(self))
-
         return combination
 
     def createNewComb3(self, scaling_list, dec_index, inc_index, start_index):
@@ -80,8 +109,13 @@ class Optimizer:
                     + getattr(self.starting_class,f'getCurrent{scaling_list[inc_index]}')()
                     + getattr(self.starting_class, f'getCurrent{scaling_list[start_index]}')())
 
+        rest_stats = self.getRestStats()
+        rest_stat_string = ', '.join(
+            f"{stat}: {getattr(self.starting_class, f'getCurrent{stat}')()}"
+            for stat in rest_stats)
+
         combination = Combination.Combination(stat_string,
-                                              stat_sum,
+                                              stat_sum, rest_stat_string,
                                               Calculator.calculateTotalDmg(self),
                                               self.weapon_passive.getPassiveType1(),
                                               self.weapon_passive.getPassiveType2(),
@@ -91,11 +125,97 @@ class Optimizer:
         return combination
 
 
+    def getUsablePoints(self):
+
+
+        scaling_points = (
+                    self.current_stats[4] - self.starting_class.getMinStr() +
+                    self.current_stats[5] - self.starting_class.getMinDex() +
+                    self.current_stats[6] - self.starting_class.getMinInt() +
+                    self.current_stats[7] - self.starting_class.getMinFai() +
+                    self.current_stats[8] - self.starting_class.getMinArc())
+
+        return (self.current_stats[0] -
+                (self.current_stats[1] - self.starting_class.getMinVigor() +
+                 self.current_stats[2] - self.starting_class.getMinMind() +
+                 self.current_stats[3] - self.starting_class.getMinEndurance() +
+                 self.current_stats[4] - self.starting_class.getMinStr() +
+                 self.current_stats[5] - self.starting_class.getMinDex() +
+                 self.current_stats[6] - self.starting_class.getMinInt() +
+                 self.current_stats[7] - self.starting_class.getMinFai() +
+                 self.current_stats[8] - self.starting_class.getMinArc()
+                 + self.starting_class.getMinSoulLevel())
+                 + scaling_points)
+
+
+
+
+
+    def setCustomMinStats(self):
+
+        a = (self.custom_min_stats[0] - self.starting_class.getMinVigor() +
+             self.custom_min_stats[1] - self.starting_class.getMinMind() +
+             self.custom_min_stats[2] - self.starting_class.getMinEndurance() +
+             self.custom_min_stats[3] - self.starting_class.getMinStr() +
+             self.custom_min_stats[4] - self.starting_class.getMinDex() +
+             self.custom_min_stats[5] - self.starting_class.getMinInt() +
+             self.custom_min_stats[6] - self.starting_class.getMinFai() +
+             self.custom_min_stats[7] - self.starting_class.getMinArc())
+
+
+        self.starting_class.setMinVigor(self.custom_min_stats[0])
+        self.starting_class.setMinMind(self.custom_min_stats[1])
+        self.starting_class.setMinEndurance(self.custom_min_stats[2])
+        self.starting_class.setMinStr(self.custom_min_stats[3])
+        self.starting_class.setMinDex(self.custom_min_stats[4])
+        self.starting_class.setMinInt(self.custom_min_stats[5])
+        self.starting_class.setMinFai(self.custom_min_stats[6])
+        self.starting_class.setMinArc(self.custom_min_stats[7])
+
+        return a
+
+    def setCustomCurrentStats(self):
+
+        self.starting_class.setCurrentVigor(self.custom_min_stats[0])
+        self.starting_class.setCurrentMind(self.custom_min_stats[1])
+        self.starting_class.setCurrentEndurance(self.custom_min_stats[2])
+        self.starting_class.setCurrentStr(self.custom_min_stats[3])
+        self.starting_class.setCurrentDex(self.custom_min_stats[4])
+        self.starting_class.setCurrentInt(self.custom_min_stats[5])
+        self.starting_class.setCurrentFai(self.custom_min_stats[6])
+        self.starting_class.setCurrentArc(self.custom_min_stats[7])
+
+
+    # def setCustomCurrentStats2(self):
+    #
+    #     self.starting_class.setCurrentSoulLevel(self.current_stats[0])
+    #     self.starting_class.setCurrentVigor(self.current_stats[1])
+    #     self.starting_class.setCurrentMind(self.current_stats[2])
+    #     self.starting_class.setCurrentEndurance(self.current_stats[3])
+    #     self.starting_class.setCurrentStr(self.current_stats[4])
+    #     self.starting_class.setCurrentDex(self.current_stats[5])
+    #     self.starting_class.setCurrentInt(self.current_stats[6])
+    #     self.starting_class.setCurrentFai(self.current_stats[7])
+    #     self.starting_class.setCurrentArc(self.current_stats[8])
+
+
     def optimize(self):
+
+        diff = 0
+        if self.use_custom_min_stats:
+            diff = self.setCustomMinStats()
+
+
 
         value_list = []
         scaling_list = self.getScalingStats()
-        allocated_points = 70
+        #allocated_points = 70
+        #self.setCustomCurrentStats()
+        allocated_points = self.getUsablePoints() - diff
+
+        if self.use_custom_min_stats:
+            self.setCustomCurrentStats()
+
 
         attribute_setters = {
             "Str": self.starting_class.setCurrentStr,

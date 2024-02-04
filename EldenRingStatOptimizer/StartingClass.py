@@ -53,7 +53,7 @@ class StartingClass:
     def getMinArc(self):
         return self.min_arc
 
-    def getMinSoul_level(self):
+    def getMinSoulLevel(self):
         return self.min_soul_level
 
     def getCurrentVigor(self):
@@ -80,7 +80,7 @@ class StartingClass:
     def getCurrentArc(self):
         return self.current_arc
 
-    def getCurrentSoul_level(self):
+    def getCurrentSoulLevel(self):
         return self.current_soul_level
 
     def setCurrentVigor(self, current_vigor):
@@ -107,8 +107,34 @@ class StartingClass:
     def setCurrentArc(self, current_arc):
         self.current_arc = current_arc
 
-    def setCurrentSoul_level(self, current_soul_level):
+    def setCurrentSoulLevel(self, current_soul_level):
         self.current_soul_level = current_soul_level
+
+
+    def setMinVigor(self, min_vigor):
+        self.min_vigor = min_vigor
+
+    def setMinMind(self, min_mind):
+        self.min_mind = min_mind
+
+    def setMinEndurance(self, min_endurance):
+        self.min_endurance = min_endurance
+
+    def setMinStr(self, min_str):
+        self.min_str = min_str
+
+    def setMinDex(self, min_dex):
+        self.min_dex = min_dex
+
+    def setMinInt(self, min_int):
+        self.min_int = min_int
+
+    def setMinFai(self, min_fai):
+        self.min_fai = min_fai
+
+    def setMinArc(self, min_arc):
+        self.min_arc = min_arc
+
 
 
 

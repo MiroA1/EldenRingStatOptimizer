@@ -8,10 +8,27 @@ import WeaponPassive
 import WeaponScaling
 
 
-# class FileOperations:
-#     def __init__(self, starting_class, weapon):
-#         self.starting_class = starting_class
-#         self.weapon = weapon
+
+def getWeaponMaxUpgradeLevel(weapon_name):
+
+    with open("Data/ExtraData.csv", 'r') as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            if row['Name'] == weapon_name:
+                max_upgrade_level = int(row["Max Upgrade"])
+
+    return max_upgrade_level
+
+
+def getFullWeaponName(weapon_name, affinity):
+
+    with open("Data/ExtraData.csv", 'r') as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            if row['Weapon Name'] == weapon_name and row ['Affinity (Dropdown)'] == affinity:
+                weapon_full_name = row["Name"]
+
+    return weapon_full_name
 
 
 def initStartingClass(class_name):
@@ -28,35 +45,12 @@ def initStartingClass(class_name):
                 min_intelligence = int(row["Intelligence"])
                 min_faith = int(row["Faith"])
                 min_arcane = int(row["Arcane"])
-                soul_level = int(row["Level"])
+                min_soul_level = int(row["Level"])
                 break
+
 
     return StartingClass.StartingClass(class_name, min_vigor, min_mind, min_endurance,
-                                       min_strength, min_dexterity, min_intelligence, min_faith, min_arcane, soul_level)
-
-
-def getWeaponMaxUpgradeLevel(weapon_name):
-
-    with open("Data/ExtraData.csv", 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row['Name'] == weapon_name:
-                max_upgrade_level = int(row["Max Upgrade"])
-                break
-
-    return max_upgrade_level
-
-
-def getFullWeaponName(weapon_name, affinity):
-
-    with open("Data/ExtraData.csv", 'r') as csv_file:
-        reader = csv.DictReader(csv_file)
-        for row in reader:
-            if row['Weapon Name'] == weapon_name and row ['Affinity (Dropdown)'] == affinity:
-               weapon_full_name = row["Name"]
-
-
-    return weapon_full_name
+                                       min_strength, min_dexterity, min_intelligence, min_faith, min_arcane, min_soul_level)
 
 
 
@@ -101,6 +95,11 @@ def initWeaponPassive(weapon_name, weapon_upgrade_level):
             if row['Name'] == weapon_name:
                 passive_type1 = row["Type 1"]
                 passive_type2 = row["Type 2"]
+
+                if passive_type1 == "":
+                    passive_type1 = "None"
+                if passive_type2 == "":
+                    passive_type2 = "None"
 
                 if passive_type1 == "Scarlet Rot":
                     rot_mad_sleep1 = float(row["Scarlet Rot +0"])

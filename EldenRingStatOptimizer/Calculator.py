@@ -24,7 +24,7 @@ def calcPassive2(optimizer):
     passive_type = optimizer.weapon_passive.getPassiveType2()
     passive_rotmadsleep_value = optimizer.weapon_passive.getRotMadSleepBase2()
 
-    if optimizer.weapon_passive.getPassiveType2() == "":
+    if optimizer.weapon_passive.getPassiveType2() == "None":
         return 0
 
     if optimizer.weapon_scaling.getArcScaling() == 0:
@@ -63,7 +63,7 @@ def calcPassive2(optimizer):
         else:
             return 0
 
-    return round(passive2_value, 5)
+    return round(passive2_value, 3)
 
 
 def calcPassive1(optimizer):
@@ -78,7 +78,7 @@ def calcPassive1(optimizer):
     passive_type = optimizer.weapon_passive.getPassiveType1()
     passive_rotmadsleep_value = optimizer.weapon_passive.getRotMadSleepBase1()
 
-    if optimizer.weapon_passive.getPassiveType1() == "":
+    if optimizer.weapon_passive.getPassiveType1() == "None":
         return 0
 
     if optimizer.weapon_scaling.getArcScaling() == 0:
@@ -123,7 +123,7 @@ def calcPassive1(optimizer):
         else:
             return 0
 
-    return round(passive1_value, 5)
+    return round(passive1_value, 3)
 
 
 def calculateTotalDmg(optimizer):
@@ -154,4 +154,4 @@ def calculateTotalDmg(optimizer):
                                             int_req_met, fai_req_met,
                                             arc_req_met) + optimizer.weapon_attack.getHolyAttack())
 
-    return round(total_dmg, 5)
+    return round(total_dmg, 3)
